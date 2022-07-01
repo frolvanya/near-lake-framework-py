@@ -18,7 +18,6 @@ async def list_blocks(s3_bucket_name: str, start_from_block_height: near_types.B
     async with session.create_client("s3", region_name=REGION_NAME,
                                      aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
                                      aws_access_key_id=AWS_ACCESS_KEY_ID) as s3_client:
-
         paginator = s3_client.get_paginator("list_objects_v2")
         async for response in paginator.paginate(
             Bucket=s3_bucket_name,
