@@ -1,4 +1,4 @@
-from typing import Annotated, List
+from typing import Annotated, List, Union
 
 
 class BlockHeight:
@@ -64,8 +64,8 @@ class BlockHeaderView:
         next_bp_hash: CryptoHash,
         block_merkle_root: CryptoHash,
         epoch_sync_data_hash: CryptoHash,
-        approvals,
-        signature,
+        approvals: Union[str, None],
+        signature: str,
         latest_protocol_version: int
     ):
         #   approvals: Vec < Option < Signature > , Global > ,
@@ -125,7 +125,7 @@ class ChunkHeaderView:
         outgoing_receipts_root: CryptoHash,
         tx_root: CryptoHash,
         validator_proposals: List[ValidatorStakeView],
-        signature,
+        signature: str,
     ):
         #   signature: Signature,
 
@@ -148,10 +148,33 @@ class ChunkHeaderView:
         self.signature = signature
 
 
-class StreamerMessage:
-    def __init__(self, block, shards):
-        self.block = block
-        self.shards = shards
+class IndexerTransactionWithOutcome:
+    def __init__(
+        self,
+        signer_id: str,
+        public_key: str,
+        nonce: int,
+        receiver_id: str,
+        # actions: Vec < ActionView, Global > ,
+        signature: str,
+        hash: CryptoHash
+    ):
+        # public_key: PublicKey,
+        # signature: Signature
+        # self.actions = actions
+
+        self.signer_id = signer_id
+        self.public_key = public_key
+        self.nonce = nonce
+        self.receiver_id = receiver_id
+        self.signature = signature
+        self.hash = hash
+        pass
+
+
+class IndexerChunkView:
+    def __init__(self, author: str, header: ChunkHeaderView, transactions: IndexerTransactionWithOutcome, receipts):
+        pass
 
 
 class BlockView:
@@ -159,3 +182,14 @@ class BlockView:
         self.author = author
         self.header = header
         self.chunks = chunks
+
+
+class IndexerShard:
+    def __init__(self, shard_id: int, chunk, receipt_execution_outcomes, state_changes):
+        pass
+
+
+class StreamerMessage:
+    def __init__(self, block: BlockView, shards):
+        self.block = block
+        self.shards = shards
