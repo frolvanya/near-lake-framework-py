@@ -36,11 +36,13 @@ async def fetch_streamer_message(s3_client, s3_bucket_name: str, block_height: n
     json_content = json.loads(response['Body'].read().decode('utf-8'))
 
     block_view = near_types.BlockView.from_dict(json_content)
-    shards = []
+    # shards = await asyncio.gather(*[fetch_shard_or_retry(s3_client, s3_bucket_name, block_height, shard_id) for shard_id in range(len(block_view.chunks))])
 
-    for shard_id in range(len(block_view.chunks)):
-        shards.append(await fetch_shard_or_retry(
-            s3_client, s3_bucket_name, block_height, shard_id))
+    shards_fetching = [
+        fetch_shard_or_retry(s3_client, s3_bucket_name, block_height, shard_id)
+        for shard_id in range(len(block_view.chunks))
+    ]
+    shards = await asyncio.gather(*shards_fetching)
 
     return near_types.StreamerMessage(block_view, shards)
 
