@@ -1,9 +1,10 @@
 from typing import Annotated, List, Union
+from dataclasses import dataclass
 
 
+@dataclass
 class BlockHeight:
-    def __init__(self, block_height: int):
-        self.block_height = block_height
+    block_height: int
 
     def __int__(self):
         return self.block_height
@@ -12,184 +13,406 @@ class BlockHeight:
         return str(self.block_height)
 
 
+@dataclass
 class CryptoHash:
-    def __init__(self, hash: Annotated[List[int], 32]):
-        self.hash = hash
+    hash: Annotated[List[int], 32]
 
 
+@dataclass
 class ValidatorStakeView:
-    def __init__(self, account_id: str, public_key, stake: int):
-        # public_key: PublicKey
-
-        self.account_id = account_id
-        self.public_key = public_key
-        self.stake = stake
+    account_id: str
+    public_key: str
+    stake: int
+    # public_key: PublicKey
 
 
+@dataclass
 class SlashedValidator:
-    def __init__(self, account_id: str, is_double_sign: bool):
-        self.account_id = account_id
-        self.is_double_sign = is_double_sign
+    account_id: str
+    is_double_sign: bool
 
 
+@dataclass
 class BlockHeaderView:
-    def __init__(
-        self,
-        height: int,
-        prev_height: int,
-        epoch_id: CryptoHash,
-        next_epoch_id: CryptoHash,
-        hash: CryptoHash,
-        prev_hash: CryptoHash,
-        prev_state_root: CryptoHash,
-        chunk_receipts_root: CryptoHash,
-        chunk_headers_root: CryptoHash,
-        chunk_tx_root: CryptoHash,
-        outcome_root: CryptoHash,
-        chunks_included: int,
-        challenges_root: CryptoHash,
-        timestamp: int,
-        timestamp_nanosec: int,
-        random_value: CryptoHash,
-        validator_proposals: List[ValidatorStakeView],
-        chunk_mask: List[bool],
-        gas_price: int,
-        block_ordinal: int,
-        rent_paid: int,
-        validator_reward: int,
-        total_supply: int,
-        challenges_result: List[SlashedValidator],
-        last_final_block: CryptoHash,
-        last_ds_final_block: CryptoHash,
-        next_bp_hash: CryptoHash,
-        block_merkle_root: CryptoHash,
-        epoch_sync_data_hash: CryptoHash,
-        approvals: Union[str, None],
-        signature: str,
-        latest_protocol_version: int
-    ):
-        #   approvals: Vec < Option < Signature > , Global > ,
-        #   signature: Signature,
+    height: int
+    prev_height: int
+    epoch_id: CryptoHash
+    next_epoch_id: CryptoHash
+    hash: CryptoHash
+    prev_hash: CryptoHash
+    prev_state_root: CryptoHash
+    chunk_receipts_root: CryptoHash
+    chunk_headers_root: CryptoHash
+    chunk_tx_root: CryptoHash
+    outcome_root: CryptoHash
+    chunks_included: int
+    challenges_root: CryptoHash
+    timestamp: int
+    timestamp_nanosec: int
+    random_value: CryptoHash
+    validator_proposals: List[ValidatorStakeView]
+    chunk_mask: List[bool]
+    gas_price: int
+    block_ordinal: int
+    rent_paid: int
+    validator_reward: int
+    total_supply: int
+    challenges_result: List[SlashedValidator]
+    last_final_block: CryptoHash
+    last_ds_final_block: CryptoHash
+    next_bp_hash: CryptoHash
+    block_merkle_root: CryptoHash
+    epoch_sync_data_hash: CryptoHash
+    approvals: Union[str, None]
+    signature: str
+    latest_protocol_version: int
 
-        self.height = height
-        self.prev_height = prev_height
-        self.epoch_id = epoch_id
-        self.next_epoch_id = next_epoch_id
-        self.hash = hash
-        self.prev_hash = prev_hash
-        self.prev_state_root = prev_state_root
-        self.chunk_receipts_root = chunk_receipts_root
-        self.chunk_headers_root = chunk_headers_root
-        self.chunk_tx_root = chunk_tx_root
-        self.outcome_root = outcome_root
-        self.chunks_included = chunks_included
-        self.challenges_root = challenges_root
-        self.timestamp = timestamp
-        self.timestamp_nanosec = timestamp_nanosec
-        self.random_value = random_value
-        self.validator_proposals = validator_proposals
-        self.chunk_mask = chunk_mask
-        self.gas_price = gas_price
-        self.block_ordinal = block_ordinal
-        self.rent_paid = rent_paid
-        self.validator_reward = validator_reward
-        self.total_supply = total_supply
-        self.challenges_result = challenges_result
-        self.last_final_block = last_final_block
-        self.last_ds_final_block = last_ds_final_block
-        self.next_bp_hash = next_bp_hash
-        self.block_merkle_root = block_merkle_root
-        self.epoch_sync_data_hash = epoch_sync_data_hash
-        self.approvals = approvals
-        self.signature = signature
-        self.latest_protocol_version = latest_protocol_version
+    #   approvals: Vec < Option < Signature > , Global > ,
+    #   signature: Signature,
 
 
+@dataclass
 class ChunkHeaderView:
-    def __init__(
-        self,
-        chunk_hash: CryptoHash,
-        prev_block_hash: CryptoHash,
-        outcome_root: CryptoHash,
-        prev_state_root: CryptoHash,
-        encoded_merkle_root: CryptoHash,
-        encoded_length: int,
-        height_created: int,
-        height_included: int,
-        shard_id: int,
-        gas_used: int,
-        gas_limit: int,
-        rent_paid: int,
-        validator_reward: int,
-        balance_burnt: int,
-        outgoing_receipts_root: CryptoHash,
-        tx_root: CryptoHash,
-        validator_proposals: List[ValidatorStakeView],
-        signature: str,
-    ):
-        #   signature: Signature,
-
-        self.chunk_hash = chunk_hash
-        self.prev_block_hash = prev_block_hash
-        self.outcome_root = outcome_root
-        self.encoded_merkle_root = encoded_merkle_root
-        self.encoded_length = encoded_length
-        self.height_created = height_created
-        self.height_included = height_included
-        self.shard_id = shard_id
-        self.gas_used = gas_used
-        self.gas_limit = gas_limit
-        self.rent_paid = rent_paid
-        self.validator_reward = validator_reward
-        self.balance_burnt = balance_burnt
-        self.outgoing_receipts_root = outgoing_receipts_root
-        self.tx_root = tx_root
-        self.validator_proposals = validator_proposals
-        self.signature = signature
+    chunk_hash: CryptoHash
+    prev_block_hash: CryptoHash
+    outcome_root: CryptoHash
+    prev_state_root: CryptoHash
+    encoded_merkle_root: CryptoHash
+    encoded_length: int
+    height_created: int
+    height_included: int
+    shard_id: int
+    gas_used: int
+    gas_limit: int
+    rent_paid: int
+    validator_reward: int
+    balance_burnt: int
+    outgoing_receipts_root: CryptoHash
+    tx_root: CryptoHash
+    validator_proposals: List[ValidatorStakeView]
+    signature: str
+    # signature: Signature,
 
 
+@dataclass
+class AccessKeyPermissionView:
+    @dataclass
+    class FunctionCall:
+        allowance: int
+        receiver_id: str
+        method_names: List[str]
+
+    @dataclass
+    class FullAccess:
+        pass
+
+
+@dataclass
+class AccessKeyView:
+    nonce: int
+    permission: AccessKeyPermissionView
+
+
+@dataclass
+class ActionView:
+    @dataclass
+    class CreateAccount:
+        pass
+
+    @dataclass
+    class DeployContract:
+        code: str
+
+    @dataclass
+    class FunctionCall:
+        method_name: str
+        args: str
+        gas: int
+        deposit: int
+
+    @dataclass
+    class Transfer:
+        deposit: int
+
+    @dataclass
+    class Stake:
+        stake: int
+        public_key: str
+
+    @dataclass
+    class AddKey:
+        public_key: str
+        access_key: AccessKeyView
+
+    @dataclass
+    class DeleteKey:
+        public_key: str
+
+    @dataclass
+    class DeleteAccount:
+        beneficiary_id: str
+
+
+@dataclass
+class SignedTransactionView:
+    signer_id: str
+    public_key: str
+    nonce: int
+    receiver_id: str
+    actions: List[ActionView]
+    signature: str
+    hash: CryptoHash
+
+
+@dataclass
+class Direction:
+    @dataclass
+    class Left:
+        pass
+
+    @dataclass
+    class Right:
+        pass
+
+
+@dataclass
+class MerklePathItem:
+    hash: CryptoHash
+    direction: Direction
+
+
+@dataclass
+class ExecutionStatusView:
+    @dataclass
+    class Unknown:
+        pass
+
+    @dataclass
+    class Failure:
+        pass
+
+    @dataclass
+    class SuccessValue:
+        value: str
+
+    @dataclass
+    class SuccessReceiptId:
+        receipt_id: CryptoHash
+
+
+@dataclass
+class CostGasUsed:
+    cost_category: str
+    cost: str
+    gas_used: int
+
+
+@dataclass
+class ExecutionMetadataView:
+    version: int
+    gas_profile: List[CostGasUsed]
+
+
+@dataclass
+class ExecutionOutcomeView:
+    logs: List[str]
+    receipt_ids: List[CryptoHash]
+    gas_burnt: int
+    tokens_burnt: int
+    executor_id: str
+    status: ExecutionStatusView
+    metadata: ExecutionMetadataView
+
+
+@dataclass
+class ExecutionOutcomeWithIdView:
+    proof: List[MerklePathItem]
+    block_hash: CryptoHash
+    id: CryptoHash
+    outcome: ExecutionOutcomeView
+
+
+@dataclass
+class DataReceiverView:
+    data_id: CryptoHash
+    receiver_id: str
+
+
+@dataclass
+class ReceiptEnumView:
+    @dataclass
+    class Action:
+        signer_id: str
+        signer_public_key: str
+        gas_price: int
+        output_data_receivers: List[DataReceiverView]
+        input_data_ids: List[CryptoHash]
+        actions: List[ActionView]
+
+    @dataclass
+    class Data:
+        data_id: CryptoHash
+        data: List[int]
+
+
+@dataclass
+class ReceiptView:
+    predecessor_id: str
+    receiver_id: str
+    receipt_id: CryptoHash
+    receipt: ReceiptEnumView
+
+
+@dataclass
+class IndexerExecutionOutcomeWithOptionalReceipt:
+    execution_outcome: ExecutionOutcomeWithIdView
+    receipt: ReceiptView
+
+
+@dataclass
 class IndexerTransactionWithOutcome:
-    def __init__(
-        self,
-        signer_id: str,
-        public_key: str,
-        nonce: int,
-        receiver_id: str,
-        # actions: Vec < ActionView, Global > ,
-        signature: str,
-        hash: CryptoHash
-    ):
-        # public_key: PublicKey,
-        # signature: Signature
-        # self.actions = actions
-
-        self.signer_id = signer_id
-        self.public_key = public_key
-        self.nonce = nonce
-        self.receiver_id = receiver_id
-        self.signature = signature
-        self.hash = hash
-        pass
+    transaction: SignedTransactionView
+    outcome: IndexerExecutionOutcomeWithOptionalReceipt
+    # public_key: PublicKey,
+    # signature: Signature
+    # self.actions = actions
 
 
+@dataclass
 class IndexerChunkView:
-    def __init__(self, author: str, header: ChunkHeaderView, transactions: IndexerTransactionWithOutcome, receipts):
-        pass
+    author: str
+    header: ChunkHeaderView
+    transactions: List[IndexerTransactionWithOutcome]
+    receipts: List[ReceiptView]
 
 
+@dataclass
 class BlockView:
-    def __init__(self, author: str, header: BlockHeaderView, chunks: ChunkHeaderView):
-        self.author = author
-        self.header = header
-        self.chunks = chunks
+    author: str
+    header: BlockHeaderView
+    chunks: ChunkHeaderView
 
 
-class IndexerShard:
-    def __init__(self, shard_id: int, chunk, receipt_execution_outcomes, state_changes):
+@dataclass
+class IndexerExecutionOutcomeWithReceipt:
+    execution_outcome: ExecutionOutcomeWithIdView
+    receipt: ReceiptView
+
+
+@dataclass
+class StateChangeCauseView:
+    @dataclass
+    class NotWritableToDisk:
+        pass
+
+    @dataclass
+    class InitialState:
+        pass
+
+    @dataclass
+    class TransactionProcessing:
+        tx_hash: CryptoHash
+
+    @dataclass
+    class ActionReceiptProcessingStarted:
+        receipt_hash: CryptoHash
+
+    @dataclass
+    class ActionReceiptGasReward:
+        receipt_hash: CryptoHash
+
+    @dataclass
+    class ReceiptProcessing:
+        receipt_hash: CryptoHash
+
+    @dataclass
+    class PostponedReceipt:
+        receipt_hash: CryptoHash
+
+    @dataclass
+    class UpdatedDelayedReceipts:
+        pass
+
+    @dataclass
+    class ValidatorAccountsUpdate:
+        pass
+
+    @dataclass
+    class Migration:
+        pass
+
+    @dataclass
+    class Resharding:
         pass
 
 
+@dataclass
+class AccountView:
+    amount: int
+    locked: int
+    code_hash: CryptoHash
+    storage_usage: int
+    storage_paid_at: int
+
+
+@dataclass
+class StateChangeValueView:
+    @dataclass
+    class AccountUpdate:
+        account_id: str
+        account: AccountView
+
+    @dataclass
+    class AccountDeletion:
+        account_id: str
+
+    @dataclass
+    class AccessKeyUpdate:
+        account_id: str
+        public_key: str
+        access_key: AccessKeyView
+
+    @dataclass
+    class AccessKeyDeletion:
+        account_id: str
+        public_key: str
+
+    @dataclass
+    class DataUpdate:
+        account_id: str
+        key: str
+        value: str
+
+    @dataclass
+    class DataDeletion:
+        account_id: str
+        key: str
+
+    @dataclass
+    class ContractCodeUpdate:
+        account_id: str
+        code: List[int]
+
+    @dataclass
+    class ContractCodeDeletion:
+        account_id: str
+
+
+@dataclass
+class StateChangeWithCauseView:
+    cause: StateChangeCauseView
+    value: StateChangeValueView
+
+
+@dataclass
+class IndexerShard:
+    shard_id: int
+    chunk: List[IndexerChunkView]
+    receipt_execution_outcomes: List[IndexerExecutionOutcomeWithReceipt]
+    state_changes: List[StateChangeWithCauseView]
+
+
+@dataclass
 class StreamerMessage:
-    def __init__(self, block: BlockView, shards):
-        self.block = block
-        self.shards = shards
+    block: BlockView
+    shards: List[IndexerShard]
