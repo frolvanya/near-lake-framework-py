@@ -1,3 +1,4 @@
+import json
 from typing import List
 import boto3
 import asyncio
@@ -22,25 +23,43 @@ async def list_blocks(s3_client, s3_bucket_name: str, start_from_block_height: n
         block_heights.append(near_types.BlockHeight(
             int(prefix.get('Prefix')[:-1])))
 
-    print(block_heights[-1])
-
     return block_heights
 
 
-async def fetch_streamer_message(s3_client, s3_bucket_name: str, block_height):
+async def fetch_streamer_message(s3_client, s3_bucket_name: str, block_height: near_types.BlockHeight) -> near_types.StreamerMessage:
     response = s3_client.get_object(
         Bucket=s3_bucket_name,
         Key="{:012d}/block.json".format(block_height),
         RequestPayer="requester",
     )
 
+    json_content = json.loads(response['Body'].read().decode('utf-8'))
 
-async def fetch_shard_or_retry(s3_client, s3_bucket_name: str, block_height, shard_id: int):
-    pass
+    block_view = near_types.BlockView.from_dict(json_content)
+    shards = []
+
+    for shard_id in range(len(block_view.chunks)):
+        shards.append(await fetch_shard_or_retry(
+            s3_client, s3_bucket_name, block_height, shard_id))
+
+    return near_types.StreamerMessage(block_view, shards)
+
+
+async def fetch_shard_or_retry(s3_client, s3_bucket_name: str, block_height: near_types.BlockHeight, shard_id: int) -> near_types.IndexerShard:
+    response = s3_client.get_object(
+        Bucket=s3_bucket_name,
+        Key="{:012d}/shard_{}.json".format(block_height, shard_id),
+        RequestPayer="requester",
+    )
+
+    json_content = json.loads(response['Body'].read().decode('utf-8'))
+    return near_types.IndexerShard.from_dict(json_content)
 
 
 async def main():
     s3_client = boto3.client("s3")
-    print(await list_blocks(s3_client, "near-lake-data-mainnet", 68875675, 10))
+    # print(await list_blocks(s3_client, "near-lake-data-mainnet", 68914412, 100))
+    print(await fetch_streamer_message(s3_client, "near-lake-data-mainnet", 68914412))
+    # print(await fetch_shard_or_retry(s3_client, "near-lake-data-mainnet", 68914412, 3))
 
 asyncio.run(main())
