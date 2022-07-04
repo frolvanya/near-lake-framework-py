@@ -9,7 +9,8 @@ from dataclasses_json import DataClassJsonMixin
 @dataclass_json
 @dataclass
 class CryptoHash(DataClassJsonMixin):
-    hash: Annotated[List[int], 32]
+    # hash: Annotated[List[int], 32]
+    hash: Any
 
 
 @dataclass_json
@@ -23,20 +24,20 @@ class BlockHeight(DataClassJsonMixin):
 class BlockHeaderView(DataClassJsonMixin):
     height: int
     prev_height: int
-    epoch_id: CryptoHash
-    next_epoch_id: CryptoHash
-    hash: CryptoHash
-    prev_hash: CryptoHash
-    prev_state_root: CryptoHash
-    chunk_receipts_root: CryptoHash
-    chunk_headers_root: CryptoHash
-    chunk_tx_root: CryptoHash
-    outcome_root: CryptoHash
+    epoch_id: Any
+    next_epoch_id: Any
+    hash: Any
+    prev_hash: Any
+    prev_state_root: Any
+    chunk_receipts_root: Any
+    chunk_headers_root: Any
+    chunk_tx_root: Any
+    outcome_root: Any
     chunks_included: int
-    challenges_root: CryptoHash
+    challenges_root: Any
     timestamp: int
     timestamp_nanosec: int
-    random_value: CryptoHash
+    random_value: Any
     validator_proposals: List[Any]
     chunk_mask: List[bool]
     gas_price: int
@@ -45,11 +46,11 @@ class BlockHeaderView(DataClassJsonMixin):
     validator_reward: int
     total_supply: int
     challenges_result: List[Any]
-    last_final_block: CryptoHash
-    last_ds_final_block: CryptoHash
-    next_bp_hash: CryptoHash
-    block_merkle_root: CryptoHash
-    epoch_sync_data_hash: CryptoHash
+    last_final_block: Any
+    last_ds_final_block: Any
+    next_bp_hash: Any
+    block_merkle_root: Any
+    epoch_sync_data_hash: Any
     # approvals: Union[str, None]
     approvals: Any
     signature: str

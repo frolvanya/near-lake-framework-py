@@ -52,5 +52,18 @@ async def start(config: near_types.LakeConfig):
             while not streamer_messages_queue.empty():
                 streamer_message = await streamer_messages_queue.get()
 
-                if last_processed_block_hash != None:
-                    pass
+                if last_processed_block_hash != streamer_message.block.prev_hash:
+                    await asyncio.sleep(0.2)
+                    break
+
+                last_processed_block_hash = streamer_message.block.header.hash
+                start_from_block_height = streamer_message.block.header.height + 1
+
+                pending_block_height = pending_block_heights.next()
+                streamer_messages_queue.put(
+                    s3_fetchers.fetch_streamer_message(
+                        s3_client,
+                        config.s3_bucket_name,
+                        pending_block_height,
+                    )
+                )

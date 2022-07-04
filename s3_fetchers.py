@@ -69,8 +69,8 @@ async def main():
                                      aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
                                      aws_access_key_id=AWS_ACCESS_KEY_ID) as s3_client:
 
-        pprint(await list_blocks(s3_client, "near-lake-data-mainnet", 69083721, 10))
-        pprint(await fetch_streamer_message(s3_client, "near-lake-data-mainnet", 69083721))
-        pprint(await fetch_shard_or_retry(s3_client, "near-lake-data-mainnet", 69083721, 3))
+        pprint(await list_blocks(s3_client, "near-lake-data-mainnet", 69115265, 10))
+        pprint(await fetch_streamer_message(s3_client, "near-lake-data-mainnet", 69115265))
+        pprint(await fetch_shard_or_retry(s3_client, "near-lake-data-mainnet", 69115265, 3))
 
 asyncio.run(main())
