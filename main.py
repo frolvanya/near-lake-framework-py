@@ -59,8 +59,8 @@ async def start(config: near_types.LakeConfig, streamer_messages_queue: asyncio.
                 if last_processed_block_hash and last_processed_block_hash != streamer_message.block.header.prev_hash:
                     print(
                         "`prev_hash` does not match, refetching the data from S3 in 200ms",
-                       last_processed_block_hash,
-                       streamer_message.block.header.prev_hash
+                        last_processed_block_hash,
+                        streamer_message.block.header.prev_hash
                     )
 
                     await asyncio.sleep(0.2)
@@ -84,6 +84,7 @@ async def start(config: near_types.LakeConfig, streamer_messages_queue: asyncio.
 
                 await streamer_messages_queue.put(streamer_message)
 
+
 def streamer(config: near_types.LakeConfig):
     streamer_messages_queue: asyncio.Queue = asyncio.Queue(
         maxsize=config.blocks_preload_pool_size
@@ -91,21 +92,21 @@ def streamer(config: near_types.LakeConfig):
     stream_handle = asyncio.create_task(start(config, streamer_messages_queue))
     return (stream_handle, streamer_messages_queue)
 
-async def main():
-    config = near_types.LakeConfig(
-        "near-lake-data-mainnet",
-        "eu-central-1",
-        69130938,
-        10
-    )
+# async def main():
+#     config = near_types.LakeConfig(
+#         "near-lake-data-mainnet",
+#         "eu-central-1",
+#         69130938,
+#         10
+#     )
 
-    stream_handle, streamer_messages_queue = streamer(config)
-    while True:
-        streamer_message = await streamer_messages_queue.get()
-        print(f"Received Block #{streamer_message.block.header.height} from Lake Framework")
-        #await asyncio.sleep(1)
+#     stream_handle, streamer_messages_queue = streamer(config)
+#     while True:
+#         streamer_message = await streamer_messages_queue.get()
+#         print(f"Received Block #{streamer_message.block.header.height} from Lake Framework")
+#         #await asyncio.sleep(1)
 
 
-loop = asyncio.get_event_loop()
-cors = asyncio.wait([main()])
-loop.run_until_complete(cors)
+# loop = asyncio.get_event_loop()
+# cors = asyncio.wait([main()])
+# loop.run_until_complete(cors)
