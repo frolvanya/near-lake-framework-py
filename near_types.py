@@ -1,29 +1,32 @@
 from typing import Annotated, Any, List, Union
+from typing_extensions import TypeAlias
 
-from dataclasses import dataclass
-from typing_extensions import Self
-from dataclasses_json import dataclass_json
-from dataclasses_json import DataClassJsonMixin
+from dataclasses import dataclass, field
+from dataclasses_json import DataClassJsonMixin, dataclass_json, config, mm
 
 
 @dataclass_json
 @dataclass
-class CryptoHash(DataClassJsonMixin):
+class CryptoHash:
     # hash: Annotated[List[int], 32]
     hash: Any
 
 
-@dataclass_json
-@dataclass
-class BlockHeight(DataClassJsonMixin):
-    block_height: int
+BlockHeight = int
+
+class BlockHeightField(mm.fields.Integer):
+    """Block Height is unsigned 64-bit integer, so it needs to be serialized as a string and get deserialized
+    to an integer type in Python.
+    """
+    def __init__(self, *args, **kwargs):
+        return super().__init__(*args, **kwargs, as_string=True)
 
 
 @dataclass_json
 @dataclass
-class BlockHeaderView(DataClassJsonMixin):
-    height: int
-    prev_height: int
+class BlockHeaderView:
+    height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
+    prev_height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
     epoch_id: Any
     next_epoch_id: Any
     hash: Any
@@ -76,7 +79,7 @@ class IndexerShard(DataClassJsonMixin):
 
 @dataclass_json
 @dataclass
-class StreamerMessage(DataClassJsonMixin):
+class StreamerMessage:
     block: BlockView
     shards: List[Any]
 
@@ -85,16 +88,16 @@ class StreamerMessage(DataClassJsonMixin):
 class LakeConfig:
     s3_bucket_name: str
     s3_region_name: str
-    start_block_height: int
+    start_block_height: BlockHeight
     blocks_preload_pool_size: int
 
-    def mainnet(self) -> Self:
+    def mainnet(self) -> 'LakeConfig':
         self.s3_bucket_name = "near-lake-data-mainnet"
         self.s3_region_name = "eu-central-1"
 
         return self
 
-    def testnet(self) -> Self:
+    def testnet(self) -> 'LakeConfig':
         self.s3_bucket_name = "near-lake-data-testnet"
         self.s3_region_name = "eu-central-1"
 
