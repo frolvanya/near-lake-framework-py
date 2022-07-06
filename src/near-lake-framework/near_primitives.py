@@ -14,10 +14,12 @@ class CryptoHash:
 
 BlockHeight = int
 
+
 class BlockHeightField(mm.fields.Integer):
     """Block Height is unsigned 64-bit integer, so it needs to be serialized as a string and get deserialized
     to an integer type in Python.
     """
+
     def __init__(self, *args, **kwargs):
         return super().__init__(*args, **kwargs, as_string=True)
 
@@ -26,7 +28,8 @@ class BlockHeightField(mm.fields.Integer):
 @dataclass
 class BlockHeaderView:
     height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
-    prev_height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
+    prev_height: BlockHeight = field(
+        metadata=config(mm_field=BlockHeightField()))
     epoch_id: Any
     next_epoch_id: Any
     hash: Any
@@ -82,23 +85,3 @@ class IndexerShard(DataClassJsonMixin):
 class StreamerMessage:
     block: BlockView
     shards: List[Any]
-
-
-@dataclass
-class LakeConfig:
-    s3_bucket_name: str
-    s3_region_name: str
-    start_block_height: BlockHeight
-    blocks_preload_pool_size: int
-
-    def mainnet(self) -> 'LakeConfig':
-        self.s3_bucket_name = "near-lake-data-mainnet"
-        self.s3_region_name = "eu-central-1"
-
-        return self
-
-    def testnet(self) -> 'LakeConfig':
-        self.s3_bucket_name = "near-lake-data-testnet"
-        self.s3_region_name = "eu-central-1"
-
-        return self

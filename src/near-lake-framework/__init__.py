@@ -5,23 +5,44 @@ from typing import Optional
 
 from aiobotocore.session import get_session
 
-import near_types
+import near_primitives
 import s3_fetchers
 
+from dataclasses import dataclass
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
 
-async def start(config: near_types.LakeConfig, streamer_messages_queue: asyncio.Queue):
+@dataclass
+class LakeConfig:
+    s3_bucket_name: str
+    s3_region_name: str
+    start_block_height: near_primitives.BlockHeight
+    blocks_preload_pool_size: int
+
+    def mainnet(self) -> 'LakeConfig':
+        self.s3_bucket_name = "near-lake-data-mainnet"
+        self.s3_region_name = "eu-central-1"
+
+        return self
+
+    def testnet(self) -> 'LakeConfig':
+        self.s3_bucket_name = "near-lake-data-testnet"
+        self.s3_region_name = "eu-central-1"
+
+        return self
+
+
+async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
     session = get_session()
     async with session.create_client(
         "s3", region_name=config.s3_region_name,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
         aws_access_key_id=AWS_ACCESS_KEY_ID
     ) as s3_client:
-        start_from_block_height: near_types.BlockHeight = config.start_block_height
-        last_processed_block_hash: Optional[near_types.CryptoHash] = None
+        start_from_block_height: near_primitives.BlockHeight = config.start_block_height
+        last_processed_block_hash: Optional[near_primitives.CryptoHash] = None
 
         while True:
             block_heights_prefixes = await s3_fetchers.list_blocks(
@@ -85,20 +106,25 @@ async def start(config: near_types.LakeConfig, streamer_messages_queue: asyncio.
                 await streamer_messages_queue.put(streamer_message)
 
 
-def streamer(config: near_types.LakeConfig):
+def streamer(config: LakeConfig):
     streamer_messages_queue: asyncio.Queue = asyncio.Queue(
         maxsize=config.blocks_preload_pool_size
     )
     stream_handle = asyncio.create_task(start(config, streamer_messages_queue))
     return (stream_handle, streamer_messages_queue)
 
+# import asyncio
+
+# from near_lake_framework import near_types
+# from near_lake_framework import streamer
+
 
 # async def main():
 #     config = near_types.LakeConfig(
-#         "near-lake-data-mainnet",
-#         "eu-central-1",
-#         69130938,
-#         10
+#         s3_bucket_name="near-lake-data-mainnet",
+#         s3_region_name="eu-central-1",
+#         start_block_height=69130938,
+#         blocks_preload_pool_size=10
 #     )
 
 #     stream_handle, streamer_messages_queue = streamer(config)

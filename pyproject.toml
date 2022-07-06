@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "example_package_frolik"
+name = "near_lake_framework"
 version = "0.0.1"
 authors = [
   { name="Ivan Frolov", email="frolvanya@gmail.com" },
