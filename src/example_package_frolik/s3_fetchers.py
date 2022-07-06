@@ -1,8 +1,6 @@
 import asyncio
 from typing import List
 
-from aiobotocore.session import get_session
-
 import near_types
 
 

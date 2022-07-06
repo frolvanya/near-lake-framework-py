@@ -33,8 +33,7 @@ async def main():
 
 
 loop = asyncio.get_event_loop()
-cors = asyncio.wait([main()])
-loop.run_until_complete(cors)
+loop.run_until_complete(main())
 ```
 
 ### Tutorials

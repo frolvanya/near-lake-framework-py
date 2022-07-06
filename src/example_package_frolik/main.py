@@ -92,6 +92,7 @@ def streamer(config: near_types.LakeConfig):
     stream_handle = asyncio.create_task(start(config, streamer_messages_queue))
     return (stream_handle, streamer_messages_queue)
 
+
 # async def main():
 #     config = near_types.LakeConfig(
 #         "near-lake-data-mainnet",
@@ -103,10 +104,10 @@ def streamer(config: near_types.LakeConfig):
 #     stream_handle, streamer_messages_queue = streamer(config)
 #     while True:
 #         streamer_message = await streamer_messages_queue.get()
-#         print(f"Received Block #{streamer_message.block.header.height} from Lake Framework")
-#         #await asyncio.sleep(1)
+#         print(
+#             f"Received Block #{streamer_message.block.header.height} from Lake Framework")
+#         # await asyncio.sleep(1)
 
 
 # loop = asyncio.get_event_loop()
-# cors = asyncio.wait([main()])
-# loop.run_until_complete(cors)
+# loop.run_until_complete(main())
