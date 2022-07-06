@@ -6,6 +6,8 @@ NEAR Lake Framework is a small library companion to [NEAR Lake](https://github.c
 your own indexer that subscribes to the stream of blocks from the NEAR Lake data source and create your own logic to process
 the NEAR Protocol data.
 
+![MIT or Apache 2.0 licensed](https://img.shields.io/crates/l/near-lake-framework.svg)
+
 ---
 
 [Official NEAR Lake Framework launch announcement](https://gov.near.org/t/announcement-near-lake-framework-brand-new-word-in-indexer-building-approach/17668) has been published on the NEAR Gov Forum
