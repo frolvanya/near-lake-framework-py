@@ -15,7 +15,8 @@ Greetings from the Data Platform Team! We are happy and proud to announce an MVP
 
 ## Example
 
-```async def main():
+```python3
+async def main():
     config = near_types.LakeConfig(
         "near-lake-data-mainnet",
         "eu-central-1",
