@@ -53,7 +53,7 @@ $ pip3 install near-lake-framework
 
 ### Credentials
 
-To be able to access the data from NEAR Lake you need to provide credentials. Please, see the Credentials article (https://near-indexers.io/tutorials/lake/js-lake-indexer#compile-and-run)
+To be able to access the data from NEAR Lake you need to provide credentials. Please, see the [Credentials article](https://near-indexers.io/tutorials/lake/credentials)
 
 ## Configuration
 
