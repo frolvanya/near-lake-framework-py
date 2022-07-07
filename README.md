@@ -1,6 +1,6 @@
-# NEAR Lake Framework PY
+# NEAR Lake Framework for Python
 
-Available in programming languages: [Rust](https://github.com/near/near-lake-framework-rs) | [Javascript](https://github.com/near/near-lake-framework-rs) | **Python3**
+Available in programming languages: [Rust](https://github.com/near/near-lake-framework-rs) | [Javascript](https://github.com/near/near-lake-framework-js) | **Python3**
 
 NEAR Lake Framework is a small library companion to [NEAR Lake](https://github.com/near/near-lake). It allows you to build
 your own indexer that subscribes to the stream of blocks from the NEAR Lake data source and create your own logic to process
@@ -25,12 +25,10 @@ from near_lake_framework import streamer
 
 
 async def main():
-    config = LakeConfig(
-        s3_bucket_name="near-lake-data-mainnet",
-        s3_region_name="eu-central-1",
-        start_block_height=69130938,
-        blocks_preload_pool_size=10
-    )
+    config = LakeConfig.mainnet()
+    config.start_block_height = 69130938
+    config.aws_access_key = "YOUR_AWS_ACCESS_KEY"
+    config.aws_secret_key = "YOUR_AWS_SECRET_KEY"
 
     stream_handle, streamer_messages_queue = streamer(config)
     while True:
@@ -44,9 +42,7 @@ loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
 ```
 
-### Tutorials
-
-### More examples
+## How to use
 
 ### Dependencies
 
@@ -55,6 +51,10 @@ Install `near-lake-framework`
 ```bash
 $ pip3 install near-lake-framework
 ```
+
+### Credentials
+
+To be able to access the data from NEAR Lake you need to provide credentials. Please, see the Credentials article (https://near-indexers.io/tutorials/lake/js-lake-indexer#compile-and-run)
 
 ## Configuration
 
@@ -93,10 +93,3 @@ $5.19 + $12.96 = $18.15
 ```
 
 The price depends on the number of shards
-
-## Future plans
-
-We use Milestones with clearly defined acceptance criteria:
-
-* [x] [MVP](https://github.com/near/near-lake-framework/milestone/1)
-* [ ] [1.0](https://github.com/near/near-lake-framework/milestone/2)
