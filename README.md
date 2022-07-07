@@ -18,18 +18,26 @@ Greetings from the Data Platform Team! We are happy and proud to announce an MVP
 ## Example
 
 ```python3
+import asyncio
+
+from near_lake_framework import LakeConfig
+from near_lake_framework import streamer
+
+
 async def main():
-    config = near_types.LakeConfig(
-        "near-lake-data-mainnet",
-        "eu-central-1",
-        69130938,
-        10
+    config = LakeConfig(
+        s3_bucket_name="near-lake-data-mainnet",
+        s3_region_name="eu-central-1",
+        start_block_height=69130938,
+        blocks_preload_pool_size=10
     )
 
     stream_handle, streamer_messages_queue = streamer(config)
     while True:
         streamer_message = await streamer_messages_queue.get()
-        print(f"Received Block #{streamer_message.block.header.height} from Lake Framework")
+        print(
+            f"Received Block #{streamer_message.block.header.height} from Lake Framework"
+        )
 
 
 loop = asyncio.get_event_loop()
