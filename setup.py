@@ -25,9 +25,9 @@ setuptools.setup(
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
     install_requires=[
-        "asyncio",
-        "dataclasses",
-        "dataclasses_json",
-        "aiobotocore"
+        "asyncio>=3.4.3",
+        "dataclasses>=0.6",
+        "dataclasses-json>=0.5.7",
+        "aiobotocore>=2.3.0"
     ]
 )
