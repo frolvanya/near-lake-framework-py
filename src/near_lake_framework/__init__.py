@@ -5,8 +5,9 @@ from typing import Optional
 
 from aiobotocore.session import get_session
 
-import near_primitives
-import s3_fetchers
+from near_lake_framework import near_primitives
+from near_lake_framework import s3_fetchers
+
 
 from dataclasses import dataclass
 
@@ -115,12 +116,12 @@ def streamer(config: LakeConfig):
 
 # import asyncio
 
-# from near_lake_framework import near_types
+# from near_lake_framework import LakeConfig
 # from near_lake_framework import streamer
 
 
 # async def main():
-#     config = near_types.LakeConfig(
+#     config = LakeConfig(
 #         s3_bucket_name="near-lake-data-mainnet",
 #         s3_region_name="eu-central-1",
 #         start_block_height=69130938,
@@ -131,8 +132,8 @@ def streamer(config: LakeConfig):
 #     while True:
 #         streamer_message = await streamer_messages_queue.get()
 #         print(
-#             f"Received Block #{streamer_message.block.header.height} from Lake Framework")
-#         # await asyncio.sleep(1)
+#             f"Received Block #{streamer_message.block.header.height} from Lake Framework"
+#         )
 
 
 # loop = asyncio.get_event_loop()

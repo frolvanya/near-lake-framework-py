@@ -8,7 +8,6 @@ from dataclasses_json import DataClassJsonMixin, dataclass_json, config, mm
 @dataclass_json
 @dataclass
 class CryptoHash:
-    # hash: Annotated[List[int], 32]
     hash: Any
 
 
@@ -57,7 +56,6 @@ class BlockHeaderView:
     next_bp_hash: Any
     block_merkle_root: Any
     epoch_sync_data_hash: Any
-    # approvals: Union[str, None]
     approvals: Any
     signature: str
     latest_protocol_version: int
