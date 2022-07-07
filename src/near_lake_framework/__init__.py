@@ -11,36 +11,39 @@ from near_lake_framework import s3_fetchers
 
 from dataclasses import dataclass
 
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-
 
 @dataclass
 class LakeConfig:
     s3_bucket_name: str
     s3_region_name: str
+    aws_access_key: str
+    aws_secret_key: str
     start_block_height: near_primitives.BlockHeight
-    blocks_preload_pool_size: int
+    blocks_preload_pool_size: int = 200
 
-    def mainnet(self) -> 'LakeConfig':
-        self.s3_bucket_name = "near-lake-data-mainnet"
-        self.s3_region_name = "eu-central-1"
 
-        return self
+    @classmethod
+    def mainnet(cls) -> 'LakeConfig':
+        cls.s3_bucket_name = "near-lake-data-mainnet"
+        cls.s3_region_name = "eu-central-1"
 
-    def testnet(self) -> 'LakeConfig':
-        self.s3_bucket_name = "near-lake-data-testnet"
-        self.s3_region_name = "eu-central-1"
+        return cls
 
-        return self
+    @classmethod
+    def testnet(cls) -> 'LakeConfig':
+        cls.s3_bucket_name = "near-lake-data-testnet"
+        cls.s3_region_name = "eu-central-1"
+
+        return cls
 
 
 async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
     session = get_session()
     async with session.create_client(
-        "s3", region_name=config.s3_region_name,
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        aws_access_key_id=AWS_ACCESS_KEY_ID
+        "s3",
+        region_name=config.s3_region_name,
+        aws_secret_access_key=config.aws_secret_key,
+        aws_access_key_id=config.aws_access_key
     ) as s3_client:
         start_from_block_height: near_primitives.BlockHeight = config.start_block_height
         last_processed_block_hash: Optional[near_primitives.CryptoHash] = None
@@ -121,12 +124,10 @@ def streamer(config: LakeConfig):
 
 
 # async def main():
-#     config = LakeConfig(
-#         s3_bucket_name="near-lake-data-mainnet",
-#         s3_region_name="eu-central-1",
-#         start_block_height=69130938,
-#         blocks_preload_pool_size=10
-#     )
+#     config = LakeConfig.mainnet()
+#     config.start_block_height = 69130938
+#     config.aws_access_key = "YOUR_AWS_ACCESS_KEY"
+#     config.aws_secret_key = "YOUR_AWS_SECRET_KEY"
 
 #     stream_handle, streamer_messages_queue = streamer(config)
 #     while True:
