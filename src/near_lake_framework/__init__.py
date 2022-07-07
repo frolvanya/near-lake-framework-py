@@ -119,8 +119,7 @@ def streamer(config: LakeConfig):
 
 # import asyncio
 
-# from near_lake_framework import LakeConfig
-# from near_lake_framework import streamer
+# from near_lake_framework import LakeConfig, streamer
 
 
 # async def main():
