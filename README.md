@@ -26,7 +26,7 @@ from near_lake_framework import LakeConfig, streamer
 async def main():
     config = LakeConfig.mainnet()
     config.start_block_height = 69130938
-    config.aws_access_key = "YOUR_AWS_ACCESS_KEY"
+    config.aws_access_key_id = "YOUR_AWS_ACCESS_KEY"
     config.aws_secret_key = "YOUR_AWS_SECRET_KEY"
 
     stream_handle, streamer_messages_queue = streamer(config)
