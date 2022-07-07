@@ -20,8 +20,7 @@ Greetings from the Data Platform Team! We are happy and proud to announce an MVP
 ```python3
 import asyncio
 
-from near_lake_framework import LakeConfig
-from near_lake_framework import streamer
+from near_lake_framework import LakeConfig, streamer
 
 
 async def main():
