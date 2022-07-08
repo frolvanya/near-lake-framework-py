@@ -1,7 +1,7 @@
 import asyncio
 import itertools
 import os
-from typing import Optional
+from typing import Optional, Type
 
 from aiobotocore.session import get_session
 
@@ -22,14 +22,14 @@ class LakeConfig:
     blocks_preload_pool_size: int = 200
 
     @classmethod
-    def mainnet(cls) -> "LakeConfig":
+    def mainnet(cls) -> Type["LakeConfig"]:
         cls.s3_bucket_name = "near-lake-data-mainnet"
         cls.s3_region_name = "eu-central-1"
 
         return cls
 
     @classmethod
-    def testnet(cls) -> "LakeConfig":
+    def testnet(cls) -> Type["LakeConfig"]:
         cls.s3_bucket_name = "near-lake-data-testnet"
         cls.s3_region_name = "eu-central-1"
 
