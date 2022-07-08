@@ -12,4 +12,3 @@ jobs:
           options: "--check --verbose"
           src: "./src"
           version: "22.6.0"
-          additional_dependencies: ['click==8.0.4']
