@@ -6,6 +6,7 @@ NEAR Lake Framework is a small library companion to [NEAR Lake](https://github.c
 your own indexer that subscribes to the stream of blocks from the NEAR Lake data source and create your own logic to process
 the NEAR Protocol data.
 
+[![PyPI version](https://badge.fury.io/py/near-lake-framework.svg)](https://badge.fury.io/py/near-lake-framework)
 ![MIT or Apache 2.0 licensed](https://img.shields.io/crates/l/near-lake-framework.svg)
 
 ---
