@@ -27,8 +27,7 @@ class BlockHeightField(mm.fields.Integer):
 @dataclass
 class BlockHeaderView:
     height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
-    prev_height: BlockHeight = field(
-        metadata=config(mm_field=BlockHeightField()))
+    prev_height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
     epoch_id: Any
     next_epoch_id: Any
     hash: Any
