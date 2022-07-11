@@ -66,6 +66,7 @@ class BlockView(DataClassJsonMixin):
     header: BlockHeaderView
     chunks: Any
 
+
 @dataclass_json
 @dataclass
 class ReceiptView:
@@ -73,6 +74,7 @@ class ReceiptView:
     receiver_id: str
     receipt_id: str
     receipt: Any
+
 
 class ExecutionOutcomeView:
     logs: List[str]
@@ -92,11 +94,13 @@ class ExecutionOutcomeWithIdView(DataClassJsonMixin):
     id: int
     outcome: ExecutionOutcomeView
 
+
 @dataclass_json
 @dataclass
 class IndexerExecutionOutcomeWithReceipt(DataClassJsonMixin):
     execution_outcome: ExecutionOutcomeWithIdView
     receipt: ReceiptView
+
 
 @dataclass_json
 @dataclass
@@ -105,6 +109,7 @@ class IndexerShard(DataClassJsonMixin):
     chunk: List[str]
     receipt_execution_outcomes: List[IndexerExecutionOutcomeWithReceipt]
     state_changes: List[Any]
+
 
 @dataclass_json
 @dataclass

@@ -63,7 +63,7 @@ async def fetch_shard_or_retry(
 
             async with response["Body"] as stream:
                 body = await stream.read()
-            
+
             return near_primitives.IndexerShard.from_json(body)
         except KeyboardInterrupt:
             exit(1)
