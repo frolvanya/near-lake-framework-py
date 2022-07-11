@@ -1,5 +1,4 @@
-from typing import Annotated, Any, List, Union
-from typing_extensions import TypeAlias
+from typing import Any, List
 
 from dataclasses import dataclass, field
 from dataclasses_json import DataClassJsonMixin, dataclass_json, config, mm
@@ -67,18 +66,48 @@ class BlockView(DataClassJsonMixin):
     header: BlockHeaderView
     chunks: Any
 
+@dataclass_json
+@dataclass
+class ReceiptView:
+    predecessor_id: str
+    receiver_id: str
+    receipt_id: str
+    receipt: Any
+
+class ExecutionOutcomeView:
+    logs: List[str]
+    receipt_ids: List[int]
+    gas_burnt: int
+    tokens_burnt: int
+    executor_id: str
+    status: Any
+    metadata: Any
+
+
+@dataclass_json
+@dataclass
+class ExecutionOutcomeWithIdView(DataClassJsonMixin):
+    proof: List[Any]
+    block_hash: int
+    id: int
+    outcome: ExecutionOutcomeView
+
+@dataclass_json
+@dataclass
+class IndexerExecutionOutcomeWithReceipt(DataClassJsonMixin):
+    execution_outcome: ExecutionOutcomeWithIdView
+    receipt: ReceiptView
 
 @dataclass_json
 @dataclass
 class IndexerShard(DataClassJsonMixin):
     shard_id: int
-    chunk: List[Any]
-    receipt_execution_outcomes: List[Any]
+    chunk: List[str]
+    receipt_execution_outcomes: List[IndexerExecutionOutcomeWithReceipt]
     state_changes: List[Any]
-
 
 @dataclass_json
 @dataclass
 class StreamerMessage:
     block: BlockView
-    shards: List[Any]
+    shards: List[IndexerShard]
