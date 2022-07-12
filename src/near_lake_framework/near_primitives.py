@@ -4,6 +4,11 @@ from dataclasses import dataclass, field
 from dataclasses_json import DataClassJsonMixin, config, mm
 
 
+@dataclass
+class CryptoHash(DataClassJsonMixin):
+    hash: Any
+
+
 BlockHeight = int
 
 
@@ -74,7 +79,7 @@ class ExecutionOutcome(DataClassJsonMixin):
     logs: List[str]
     receipt_ids: List[str]
     gas_burnt: int
-    tokens_burnt: int
+    tokens_burnt: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
     executor_id: str
     status: Any
     metadata: Any
