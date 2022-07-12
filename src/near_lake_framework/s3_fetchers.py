@@ -36,15 +36,15 @@ async def fetch_streamer_message(
     async with response["Body"] as stream:
         body = await stream.read()
 
-    block_view = near_primitives.BlockView.from_json(body)
+    block = near_primitives.Block.from_json(body)
 
     shards_fetching = [
         fetch_shard_or_retry(s3_client, s3_bucket_name, block_height, shard_id)
-        for shard_id in range(len(block_view.chunks))
+        for shard_id in range(len(block.chunks))
     ]
     shards = await asyncio.gather(*shards_fetching)
 
-    return near_primitives.StreamerMessage(block_view, shards)
+    return near_primitives.StreamerMessage(block, shards)
 
 
 async def fetch_shard_or_retry(
@@ -65,7 +65,5 @@ async def fetch_shard_or_retry(
                 body = await stream.read()
 
             return near_primitives.IndexerShard.from_json(body)
-        except KeyboardInterrupt:
-            exit(1)
         except:
             pass

@@ -129,9 +129,9 @@ def streamer(config: LakeConfig):
 
 # async def main():
 #     config = LakeConfig.mainnet()
-#     config.start_block_height = 69130938
-#     config.aws_access_key = "YOUR_AWS_ACCESS_KEY"
-#     config.aws_secret_key = "YOUR_AWS_SECRET_KEY"
+#     config.start_block_height = 69030747
+#     config.aws_access_key_id = os.getenv("aws_access_key_id")
+#     config.aws_secret_key = os.getenv("aws_secret_access_key")
 
 #     stream_handle, streamer_messages_queue = streamer(config)
 #     while True:

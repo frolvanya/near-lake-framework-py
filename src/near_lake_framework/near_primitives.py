@@ -1,13 +1,7 @@
 from typing import Any, List
 
 from dataclasses import dataclass, field
-from dataclasses_json import DataClassJsonMixin, dataclass_json, config, mm
-
-
-@dataclass_json
-@dataclass
-class CryptoHash:
-    hash: Any
+from dataclasses_json import DataClassJsonMixin, config, mm
 
 
 BlockHeight = int
@@ -22,9 +16,8 @@ class BlockHeightField(mm.fields.Integer):
         return super().__init__(*args, **kwargs, as_string=True)
 
 
-@dataclass_json
 @dataclass
-class BlockHeaderView:
+class BlockHeaderView(DataClassJsonMixin):
     height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
     prev_height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
     epoch_id: Any
@@ -59,7 +52,6 @@ class BlockHeaderView:
     latest_protocol_version: int
 
 
-@dataclass_json
 @dataclass
 class BlockView(DataClassJsonMixin):
     author: str
@@ -67,18 +59,18 @@ class BlockView(DataClassJsonMixin):
     chunks: Any
 
 
-@dataclass_json
 @dataclass
-class ReceiptView:
+class ReceiptView(DataClassJsonMixin):
     predecessor_id: str
     receiver_id: str
     receipt_id: str
     receipt: Any
 
 
-class ExecutionOutcomeView:
+@dataclass
+class ExecutionOutcomeView(DataClassJsonMixin):
     logs: List[str]
-    receipt_ids: List[int]
+    receipt_ids: List[str]
     gas_burnt: int
     tokens_burnt: int
     executor_id: str
@@ -86,23 +78,20 @@ class ExecutionOutcomeView:
     metadata: Any
 
 
-@dataclass_json
 @dataclass
 class ExecutionOutcomeWithIdView(DataClassJsonMixin):
     proof: List[Any]
-    block_hash: int
-    id: int
+    block_hash: str
+    id: str
     outcome: ExecutionOutcomeView
 
 
-@dataclass_json
 @dataclass
 class IndexerExecutionOutcomeWithReceipt(DataClassJsonMixin):
     execution_outcome: ExecutionOutcomeWithIdView
     receipt: ReceiptView
 
 
-@dataclass_json
 @dataclass
 class IndexerShard(DataClassJsonMixin):
     shard_id: int
@@ -111,8 +100,7 @@ class IndexerShard(DataClassJsonMixin):
     state_changes: List[Any]
 
 
-@dataclass_json
 @dataclass
-class StreamerMessage:
+class StreamerMessage(DataClassJsonMixin):
     block: BlockView
     shards: List[IndexerShard]
