@@ -4,10 +4,6 @@ from dataclasses import dataclass, field
 from dataclasses_json import DataClassJsonMixin, config, mm
 
 
-@dataclass
-class CryptoHash(DataClassJsonMixin):
-    hash: Any
-
 
 BlockHeight = int
 

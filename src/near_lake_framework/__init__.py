@@ -45,7 +45,7 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
         aws_access_key_id=config.aws_access_key_id,
     ) as s3_client:
         start_from_block_height: near_primitives.BlockHeight = config.start_block_height
-        last_processed_block_hash: Optional[near_primitives.CryptoHash] = None
+        last_processed_block_hash: Optional[str] = None
 
         while True:
             block_heights_prefixes = await s3_fetchers.list_blocks(
