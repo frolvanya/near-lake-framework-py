@@ -4,7 +4,6 @@ from dataclasses import dataclass, field
 from dataclasses_json import DataClassJsonMixin, config, mm
 
 
-
 BlockHeight = int
 
 
