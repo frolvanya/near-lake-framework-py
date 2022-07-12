@@ -1,13 +1,11 @@
-from typing import Annotated, Any, List, Union
-from typing_extensions import TypeAlias
+from typing import Any, List
 
 from dataclasses import dataclass, field
-from dataclasses_json import DataClassJsonMixin, dataclass_json, config, mm
+from dataclasses_json import DataClassJsonMixin, config, mm
 
 
-@dataclass_json
 @dataclass
-class CryptoHash:
+class CryptoHash(DataClassJsonMixin):
     hash: Any
 
 
@@ -23,62 +21,93 @@ class BlockHeightField(mm.fields.Integer):
         return super().__init__(*args, **kwargs, as_string=True)
 
 
-@dataclass_json
 @dataclass
-class BlockHeaderView:
+class BlockHeader(DataClassJsonMixin):
     height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
     prev_height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
-    epoch_id: Any
-    next_epoch_id: Any
-    hash: Any
-    prev_hash: Any
-    prev_state_root: Any
-    chunk_receipts_root: Any
-    chunk_headers_root: Any
-    chunk_tx_root: Any
-    outcome_root: Any
+    epoch_id: str
+    next_epoch_id: str
+    hash: str
+    prev_hash: str
+    prev_state_root: str
+    chunk_receipts_root: str
+    chunk_headers_root: str
+    chunk_tx_root: str
+    outcome_root: str
     chunks_included: int
-    challenges_root: Any
+    challenges_root: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
     timestamp: int
-    timestamp_nanosec: int
-    random_value: Any
+    timestamp_nanosec: field(
+        metadata=config(mm_field=mm.fields.Integer(as_string=True))
+    )
+    random_value: str
     validator_proposals: List[Any]
     chunk_mask: List[bool]
-    gas_price: int
+    gas_price: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
     block_ordinal: int
-    rent_paid: int
-    validator_reward: int
-    total_supply: int
+    rent_paid: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
+    validator_reward: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
+    total_supply: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
     challenges_result: List[Any]
-    last_final_block: Any
-    last_ds_final_block: Any
-    next_bp_hash: Any
-    block_merkle_root: Any
+    last_final_block: str
+    last_ds_final_block: str
+    next_bp_hash: str
+    block_merkle_root: str
     epoch_sync_data_hash: Any
     approvals: Any
     signature: str
     latest_protocol_version: int
 
 
-@dataclass_json
 @dataclass
-class BlockView(DataClassJsonMixin):
+class Block(DataClassJsonMixin):
     author: str
-    header: BlockHeaderView
+    header: BlockHeader
     chunks: Any
 
 
-@dataclass_json
+@dataclass
+class Receipt(DataClassJsonMixin):
+    predecessor_id: str
+    receiver_id: str
+    receipt_id: str
+    receipt: Any
+
+
+@dataclass
+class ExecutionOutcome(DataClassJsonMixin):
+    logs: List[str]
+    receipt_ids: List[str]
+    gas_burnt: int
+    tokens_burnt: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
+    executor_id: str
+    status: Any
+    metadata: Any
+
+
+@dataclass
+class ExecutionOutcomeWithId(DataClassJsonMixin):
+    proof: List[Any]
+    block_hash: str
+    id: str
+    outcome: ExecutionOutcome
+
+
+@dataclass
+class IndexerExecutionOutcomeWithReceipt(DataClassJsonMixin):
+    execution_outcome: ExecutionOutcomeWithId
+    receipt: Receipt
+
+
 @dataclass
 class IndexerShard(DataClassJsonMixin):
     shard_id: int
-    chunk: List[Any]
-    receipt_execution_outcomes: List[Any]
+    chunk: List[str]
+    receipt_execution_outcomes: List[IndexerExecutionOutcomeWithReceipt]
     state_changes: List[Any]
 
 
-@dataclass_json
 @dataclass
-class StreamerMessage:
-    block: BlockView
-    shards: List[Any]
+class StreamerMessage(DataClassJsonMixin):
+    block: Block
+    shards: List[IndexerShard]

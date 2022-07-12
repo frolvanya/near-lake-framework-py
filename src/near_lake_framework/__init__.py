@@ -45,7 +45,7 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
         aws_access_key_id=config.aws_access_key_id,
     ) as s3_client:
         start_from_block_height: near_primitives.BlockHeight = config.start_block_height
-        last_processed_block_hash: Optional[near_primitives.CryptoHash] = None
+        last_processed_block_hash: Optional[str] = None
 
         while True:
             block_heights_prefixes = await s3_fetchers.list_blocks(
@@ -129,9 +129,9 @@ def streamer(config: LakeConfig):
 
 # async def main():
 #     config = LakeConfig.mainnet()
-#     config.start_block_height = 69130938
-#     config.aws_access_key = "YOUR_AWS_ACCESS_KEY"
-#     config.aws_secret_key = "YOUR_AWS_SECRET_KEY"
+#     config.start_block_height = 69030747
+#     config.aws_access_key_id = os.getenv("aws_access_key_id")
+#     config.aws_secret_key = os.getenv("aws_secret_access_key")
 
 #     stream_handle, streamer_messages_queue = streamer(config)
 #     while True:
