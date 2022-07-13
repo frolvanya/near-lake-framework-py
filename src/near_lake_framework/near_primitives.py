@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Optional
 
 from dataclasses import dataclass, field
 from dataclasses_json import DataClassJsonMixin, config, mm
@@ -102,7 +102,7 @@ class IndexerExecutionOutcomeWithReceipt(DataClassJsonMixin):
 @dataclass
 class IndexerShard(DataClassJsonMixin):
     shard_id: int
-    chunk: List[str]
+    chunk: Optional[List[str]]
     receipt_execution_outcomes: List[IndexerExecutionOutcomeWithReceipt]
     state_changes: List[Any]
 
