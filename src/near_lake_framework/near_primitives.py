@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Optional
 
 from dataclasses import dataclass, field
 from dataclasses_json import DataClassJsonMixin, config, mm
@@ -100,9 +100,62 @@ class IndexerExecutionOutcomeWithReceipt(DataClassJsonMixin):
 
 
 @dataclass
+class SignedTransactionView(DataClassJsonMixin):
+    signer_id: str
+    public_key: str
+    nonce: int
+    receiver_id: str
+    actions: List[Any]
+    signature: str
+    hash: str
+
+
+@dataclass
+class IndexerExecutionOutcomeWithOptionalReceipt:
+    execution_outcome: ExecutionOutcomeWithId
+    receipt: Optional[Receipt]
+
+
+@dataclass
+class IndexerTransactionWithOutcome(DataClassJsonMixin):
+    transaction: SignedTransactionView
+    outcome: IndexerExecutionOutcomeWithOptionalReceipt
+
+
+@dataclass
+class ChunkHeader(DataClassJsonMixin):
+    chunk_hash: str
+    prev_block_hash: str
+    outcome_root: str
+    prev_state_root: str
+    encoded_merkle_root: str
+    encoded_length: int
+    height_created: int
+    height_included: int
+    shard_id: int
+    gas_used: int
+    gas_limit: int
+    rent_paid: int
+    validator_reward: int
+    balance_burnt: int
+    outgoing_receipts_root: str
+    tx_root: str
+    validator_proposals: List[Any]
+    signature: str
+
+
+@dataclass
+class IndexerChunk(DataClassJsonMixin):
+    author: str
+    header: ChunkHeader
+    transactions: List[IndexerTransactionWithOutcome]
+    receipts: List[Receipt]
+
+
+@dataclass
 class IndexerShard(DataClassJsonMixin):
     shard_id: int
-    chunk: List[str]
+    chunk: Optional[IndexerChunk]
     receipt_execution_outcomes: List[IndexerExecutionOutcomeWithReceipt]
     state_changes: List[Any]
 

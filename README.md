@@ -20,6 +20,7 @@ Greetings from the Data Platform Team! We are happy and proud to announce an MVP
 
 ```python3
 import asyncio
+import os
 
 from near_lake_framework import LakeConfig, streamer
 
@@ -27,8 +28,8 @@ from near_lake_framework import LakeConfig, streamer
 async def main():
     config = LakeConfig.mainnet()
     config.start_block_height = 69130938
-    config.aws_access_key_id = "YOUR_AWS_ACCESS_KEY"
-    config.aws_secret_key = "YOUR_AWS_SECRET_KEY"
+    config.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
+    config.aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
 
     stream_handle, streamer_messages_queue = streamer(config)
     while True:
