@@ -1,5 +1,6 @@
 import asyncio
 from typing import List
+import traceback
 
 from near_lake_framework import near_primitives
 
@@ -65,5 +66,5 @@ async def fetch_shard_or_retry(
                 body = await stream.read()
 
             return near_primitives.IndexerShard.from_json(body)
-        except:
-            pass
+        except Exception:
+            traceback.print_exc()
