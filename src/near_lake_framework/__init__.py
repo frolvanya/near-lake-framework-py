@@ -1,9 +1,8 @@
 import asyncio
 import itertools
-import os
 from typing import Optional, Type
 
-from aiobotocore.session import get_session
+from aiobotocore.session import get_session  # type: ignore
 
 from near_lake_framework import near_primitives
 from near_lake_framework import s3_fetchers
@@ -120,26 +119,3 @@ def streamer(config: LakeConfig):
     )
     stream_handle = asyncio.create_task(start(config, streamer_messages_queue))
     return (stream_handle, streamer_messages_queue)
-
-
-# import asyncio
-
-# from near_lake_framework import LakeConfig, streamer
-
-
-# async def main():
-#     config = LakeConfig.mainnet()
-#     config.start_block_height = 69030747
-#     config.aws_access_key_id = os.getenv("aws_access_key_id")
-#     config.aws_secret_key = os.getenv("aws_secret_access_key")
-
-#     stream_handle, streamer_messages_queue = streamer(config)
-#     while True:
-#         streamer_message = await streamer_messages_queue.get()
-#         print(
-#             f"Received Block #{streamer_message.block.header.height} from Lake Framework"
-#         )
-
-
-# loop = asyncio.get_event_loop()
-# loop.run_until_complete(main())

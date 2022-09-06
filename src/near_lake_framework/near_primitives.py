@@ -35,35 +35,65 @@ class BlockHeader(DataClassJsonMixin):
     chunk_tx_root: str
     outcome_root: str
     chunks_included: int
-    challenges_root: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
+    challenges_root: str
     timestamp: int
-    timestamp_nanosec: field(
+    timestamp_nanosec: int = field(
         metadata=config(mm_field=mm.fields.Integer(as_string=True))
     )
     random_value: str
     validator_proposals: List[Any]
     chunk_mask: List[bool]
-    gas_price: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
-    block_ordinal: int
-    rent_paid: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
-    validator_reward: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
-    total_supply: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
+    gas_price: int = field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
+    block_ordinal: Optional[int]
+    rent_paid: int = field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
+    validator_reward: int = field(
+        metadata=config(mm_field=mm.fields.Integer(as_string=True))
+    )
+    total_supply: int = field(
+        metadata=config(mm_field=mm.fields.Integer(as_string=True))
+    )
     challenges_result: List[Any]
     last_final_block: str
     last_ds_final_block: str
     next_bp_hash: str
     block_merkle_root: str
-    epoch_sync_data_hash: Any
-    approvals: Any
+    epoch_sync_data_hash: Optional[str]
+    approvals: List[Optional[str]]
     signature: str
     latest_protocol_version: int
+
+
+@dataclass
+class ChunkHeader(DataClassJsonMixin):
+    chunk_hash: str
+    prev_block_hash: str
+    outcome_root: str
+    prev_state_root: str
+    encoded_merkle_root: str
+    encoded_length: int
+    height_created: int
+    height_included: int
+    shard_id: int
+    gas_used: int
+    gas_limit: int
+    rent_paid: int = field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
+    validator_reward: int = field(
+        metadata=config(mm_field=mm.fields.Integer(as_string=True))
+    )
+    balance_burnt: int = field(
+        metadata=config(mm_field=mm.fields.Integer(as_string=True))
+    )
+    outgoing_receipts_root: str
+    tx_root: str
+    validator_proposals: List[Any]
+    signature: str
 
 
 @dataclass
 class Block(DataClassJsonMixin):
     author: str
     header: BlockHeader
-    chunks: Any
+    chunks: List[ChunkHeader]
 
 
 @dataclass
@@ -75,14 +105,29 @@ class Receipt(DataClassJsonMixin):
 
 
 @dataclass
+class CostGasUsed(DataClassJsonMixin):
+    cost_category: str
+    cost: str
+    gas_used: int
+
+
+@dataclass
+class ExecutionMetadata(DataClassJsonMixin):
+    version: int
+    gas_profile: Optional[List[CostGasUsed]]
+
+
+@dataclass
 class ExecutionOutcome(DataClassJsonMixin):
     logs: List[str]
     receipt_ids: List[str]
     gas_burnt: int
-    tokens_burnt: field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
+    tokens_burnt: int = field(
+        metadata=config(mm_field=mm.fields.Integer(as_string=True))
+    )
     executor_id: str
     status: Any
-    metadata: Any
+    metadata: ExecutionMetadata
 
 
 @dataclass
@@ -100,7 +145,7 @@ class IndexerExecutionOutcomeWithReceipt(DataClassJsonMixin):
 
 
 @dataclass
-class SignedTransactionView(DataClassJsonMixin):
+class SignedTransaction(DataClassJsonMixin):
     signer_id: str
     public_key: str
     nonce: int
@@ -118,30 +163,8 @@ class IndexerExecutionOutcomeWithOptionalReceipt:
 
 @dataclass
 class IndexerTransactionWithOutcome(DataClassJsonMixin):
-    transaction: SignedTransactionView
+    transaction: SignedTransaction
     outcome: IndexerExecutionOutcomeWithOptionalReceipt
-
-
-@dataclass
-class ChunkHeader(DataClassJsonMixin):
-    chunk_hash: str
-    prev_block_hash: str
-    outcome_root: str
-    prev_state_root: str
-    encoded_merkle_root: str
-    encoded_length: int
-    height_created: int
-    height_included: int
-    shard_id: int
-    gas_used: int
-    gas_limit: int
-    rent_paid: int
-    validator_reward: int
-    balance_burnt: int
-    outgoing_receipts_root: str
-    tx_root: str
-    validator_proposals: List[Any]
-    signature: str
 
 
 @dataclass
