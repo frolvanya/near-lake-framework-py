@@ -94,3 +94,8 @@ $5.19 + $12.96 = $18.15
 ```
 
 The price depends on the number of shards
+
+
+### Publishing to PyPi
+
+[Follow this guide to safely publish PyPi package](https://widdowquinn.github.io/coding/update-pypi-package/)
