@@ -4,11 +4,8 @@ from dataclasses import dataclass, field
 from dataclasses_json import DataClassJsonMixin, config, mm
 
 
-@dataclass
-class CryptoHash(DataClassJsonMixin):
-    hash: Any
-
-
+AccountId = str
+CryptoHash = str
 BlockHeight = int
 
 
@@ -23,24 +20,22 @@ class BlockHeightField(mm.fields.Integer):
 
 @dataclass
 class BlockHeader(DataClassJsonMixin):
-    height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
-    prev_height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
-    epoch_id: str
-    next_epoch_id: str
-    hash: str
-    prev_hash: str
-    prev_state_root: str
-    chunk_receipts_root: str
-    chunk_headers_root: str
-    chunk_tx_root: str
-    outcome_root: str
+    epoch_id: CryptoHash
+    next_epoch_id: CryptoHash
+    hash: CryptoHash
+    prev_hash: CryptoHash
+    prev_state_root: CryptoHash
+    chunk_receipts_root: CryptoHash
+    chunk_headers_root: CryptoHash
+    chunk_tx_root: CryptoHash
+    outcome_root: CryptoHash
     chunks_included: int
-    challenges_root: str
+    challenges_root: CryptoHash
     timestamp: int
     timestamp_nanosec: int = field(
         metadata=config(mm_field=mm.fields.Integer(as_string=True))
     )
-    random_value: str
+    random_value: CryptoHash
     validator_proposals: List[Any]
     chunk_mask: List[bool]
     gas_price: int = field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
@@ -53,23 +48,27 @@ class BlockHeader(DataClassJsonMixin):
         metadata=config(mm_field=mm.fields.Integer(as_string=True))
     )
     challenges_result: List[Any]
-    last_final_block: str
-    last_ds_final_block: str
-    next_bp_hash: str
-    block_merkle_root: str
-    epoch_sync_data_hash: Optional[str]
+    last_final_block: CryptoHash
+    last_ds_final_block: CryptoHash
+    next_bp_hash: CryptoHash
+    block_merkle_root: CryptoHash
+    epoch_sync_data_hash: Optional[CryptoHash]
     approvals: List[Optional[str]]
     signature: str
     latest_protocol_version: int
+    height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
+    prev_height: Optional[BlockHeight] = field(
+        default=None, metadata=config(mm_field=BlockHeightField())
+    )
 
 
 @dataclass
 class ChunkHeader(DataClassJsonMixin):
-    chunk_hash: str
-    prev_block_hash: str
-    outcome_root: str
-    prev_state_root: str
-    encoded_merkle_root: str
+    chunk_hash: CryptoHash
+    prev_block_hash: CryptoHash
+    outcome_root: CryptoHash
+    prev_state_root: CryptoHash
+    encoded_merkle_root: CryptoHash
     encoded_length: int
     height_created: int
     height_included: int
@@ -83,24 +82,24 @@ class ChunkHeader(DataClassJsonMixin):
     balance_burnt: int = field(
         metadata=config(mm_field=mm.fields.Integer(as_string=True))
     )
-    outgoing_receipts_root: str
-    tx_root: str
+    outgoing_receipts_root: CryptoHash
+    tx_root: CryptoHash
     validator_proposals: List[Any]
     signature: str
 
 
 @dataclass
 class Block(DataClassJsonMixin):
-    author: str
+    author: AccountId
     header: BlockHeader
     chunks: List[ChunkHeader]
 
 
 @dataclass
 class Receipt(DataClassJsonMixin):
-    predecessor_id: str
-    receiver_id: str
-    receipt_id: str
+    predecessor_id: AccountId
+    receiver_id: AccountId
+    receipt_id: CryptoHash
     receipt: Any
 
 
@@ -120,12 +119,12 @@ class ExecutionMetadata(DataClassJsonMixin):
 @dataclass
 class ExecutionOutcome(DataClassJsonMixin):
     logs: List[str]
-    receipt_ids: List[str]
+    receipt_ids: List[CryptoHash]
     gas_burnt: int
     tokens_burnt: int = field(
         metadata=config(mm_field=mm.fields.Integer(as_string=True))
     )
-    executor_id: str
+    executor_id: AccountId
     status: Any
     metadata: ExecutionMetadata
 
@@ -133,8 +132,8 @@ class ExecutionOutcome(DataClassJsonMixin):
 @dataclass
 class ExecutionOutcomeWithId(DataClassJsonMixin):
     proof: List[Any]
-    block_hash: str
-    id: str
+    block_hash: CryptoHash
+    id: CryptoHash
     outcome: ExecutionOutcome
 
 
@@ -146,13 +145,13 @@ class IndexerExecutionOutcomeWithReceipt(DataClassJsonMixin):
 
 @dataclass
 class SignedTransaction(DataClassJsonMixin):
-    signer_id: str
+    signer_id: AccountId
     public_key: str
     nonce: int
-    receiver_id: str
+    receiver_id: AccountId
     actions: List[Any]
     signature: str
-    hash: str
+    hash: CryptoHash
 
 
 @dataclass
@@ -169,7 +168,7 @@ class IndexerTransactionWithOutcome(DataClassJsonMixin):
 
 @dataclass
 class IndexerChunk(DataClassJsonMixin):
-    author: str
+    author: AccountId
     header: ChunkHeader
     transactions: List[IndexerTransactionWithOutcome]
     receipts: List[Receipt]
