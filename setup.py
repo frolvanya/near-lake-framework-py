@@ -30,5 +30,5 @@ setuptools.setup(
         "dataclasses-json>=0.5.7",
         "aiobotocore>=2.3.0"
     ],
-    package_data="py.typed"
+    package_data={"near_lake_framework": ["py.typed"]}
 )
