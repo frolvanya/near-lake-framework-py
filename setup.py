@@ -29,5 +29,6 @@ setuptools.setup(
         "dataclasses>=0.6",
         "dataclasses-json>=0.5.7",
         "aiobotocore>=2.3.0"
-    ]
+    ],
+    package_data="py.typed"
 )
