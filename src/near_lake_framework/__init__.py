@@ -1,6 +1,8 @@
+from __future__ import annotations
 import asyncio
 import itertools
-from typing import Optional, Type
+from enum import Enum
+from typing import Optional
 
 from aiobotocore.session import get_session  # type: ignore
 
@@ -9,6 +11,27 @@ from near_lake_framework import s3_fetchers
 
 
 from dataclasses import dataclass
+
+
+class Network(Enum):
+    MAINNET = "mainnet"
+    TESTNET = "testnet"
+
+    @staticmethod
+    def from_string(value: str):
+        try:
+            return Network(value.lower())
+        except ValueError as err:
+            valid_values = [v.value for v in Network]
+            raise ValueError(
+                f"Unknown network: {value}. Valid values are: {valid_values}"
+            ) from err
+
+    def __str__(self) -> str:
+        return self.value
+
+    def __repr__(self) -> str:
+        return self.value
 
 
 @dataclass
@@ -20,19 +43,22 @@ class LakeConfig:
     start_block_height: near_primitives.BlockHeight
     blocks_preload_pool_size: int = 200
 
-    @classmethod
-    def mainnet(cls) -> Type["LakeConfig"]:
-        cls.s3_bucket_name = "near-lake-data-mainnet"
-        cls.s3_region_name = "eu-central-1"
+    def __init__(
+        self,
+        network: Network,
+        aws_access_key_id: str,
+        aws_secret_key: str,
+        start_block_height: near_primitives.BlockHeight,
+        preload_pool_size: int = 200,
+    ):
+        # These are entirely determined by Network.
+        self.s3_bucket_name = f"near-lake-data-{network.value}"
+        self.s3_region_name = "eu-central-1"
 
-        return cls
-
-    @classmethod
-    def testnet(cls) -> Type["LakeConfig"]:
-        cls.s3_bucket_name = "near-lake-data-testnet"
-        cls.s3_region_name = "eu-central-1"
-
-        return cls
+        self.aws_access_key_id = aws_access_key_id
+        self.aws_secret_key = aws_secret_key
+        self.start_block_height = start_block_height
+        self.preload_pool_size = preload_pool_size
 
 
 async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
@@ -118,4 +144,4 @@ def streamer(config: LakeConfig):
         maxsize=config.blocks_preload_pool_size
     )
     stream_handle = asyncio.create_task(start(config, streamer_messages_queue))
-    return (stream_handle, streamer_messages_queue)
+    return stream_handle, streamer_messages_queue
