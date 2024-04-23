@@ -1,6 +1,8 @@
 import asyncio
+import logging
 from typing import List
 import traceback
+from botocore.exceptions import ClientError
 
 from near_lake_framework import near_primitives
 
@@ -55,10 +57,11 @@ async def fetch_shard_or_retry(
     shard_id: int,
 ) -> near_primitives.IndexerShard:
     while True:
+        shard_key = "{:012d}/shard_{}.json".format(block_height, shard_id)
         try:
             response = await s3_client.get_object(
                 Bucket=s3_bucket_name,
-                Key="{:012d}/shard_{}.json".format(block_height, shard_id),
+                Key=shard_key,
                 RequestPayer="requester",
             )
 
@@ -66,5 +69,10 @@ async def fetch_shard_or_retry(
                 body = await stream.read()
 
             return near_primitives.IndexerShard.from_json(body)
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'NoSuchKey':
+                logging.warning("Failed to fetch shard {} - does not exist".format(shard_key))
+            else:
+                traceback.print_exc()
         except Exception:
             traceback.print_exc()
