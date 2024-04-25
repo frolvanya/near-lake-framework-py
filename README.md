@@ -22,14 +22,16 @@ Greetings from the Data Platform Team! We are happy and proud to announce an MVP
 import asyncio
 import os
 
-from near_lake_framework import LakeConfig, streamer
+from near_lake_framework import LakeConfig, streamer, Network
 
 
 async def main():
-    config = LakeConfig.mainnet()
-    config.start_block_height = 69130938
-    config.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
-    config.aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+    config = LakeConfig(
+        network=Network.MAINNET,
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+        start_block_height=69130938,
+    )
 
     stream_handle, streamer_messages_queue = streamer(config)
     while True:
@@ -63,6 +65,7 @@ Everything should be configured before the start of your indexer application via
 
 Available parameters:
 
+- `network: Network` - provide network
 - `s3_bucket_name: str` - provide the AWS S3 bucket name (`near-lake-testnet`, `near-lake-mainnet` or yours if you run your own NEAR Lake)
 - `s3_region_name: str` - provide the region for AWS S3 bucket
 - `start_block_height: BlockHeight` - block height to start the stream from
