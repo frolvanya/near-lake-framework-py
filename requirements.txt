@@ -1,4 +1,5 @@
 asyncio==3.4.3
 dataclasses==0.6
 dataclasses-json==0.5.7
+botocore==1.24.21
 aiobotocore==2.3.0
