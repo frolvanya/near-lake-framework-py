@@ -70,8 +70,10 @@ async def fetch_shard_or_retry(
 
             return near_primitives.IndexerShard.from_json(body)
         except ClientError as e:
-            if e.response['Error']['Code'] == 'NoSuchKey':
-                logging.warning("Failed to fetch shard {} - does not exist".format(shard_key))
+            if e.response["Error"]["Code"] == "NoSuchKey":
+                logging.warning(
+                    "Failed to fetch shard {} - does not exist".format(shard_key)
+                )
             else:
                 traceback.print_exc()
         except Exception:
