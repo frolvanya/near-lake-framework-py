@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="near-lake-framework",
-    version="0.0.7",
+    version="0.0.8",
     author="Ivan Frolov",
     author_email="frolvanya@gmail.com",
     description="Python Library to connect to the NEAR Lake S3 and stream the data",
@@ -23,12 +23,12 @@ setuptools.setup(
     ],
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    python_requires=">=3.6",
+    python_requires=">=3.9",
     install_requires=[
         "asyncio>=3.4.3",
         "dataclasses>=0.6",
         "dataclasses-json>=0.5.7",
-        "aiobotocore>=2.3.0"
+        "aiobotocore>=2.3.0",
     ],
-    package_data={"near_lake_framework": ["py.typed"]}
+    package_data={"near_lake_framework": ["py.typed"]},
 )
