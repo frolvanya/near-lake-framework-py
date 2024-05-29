@@ -14,7 +14,7 @@ jobs:
         python-version: 3.9
     - name: Install Dependencies
       run: |
-        pip install mypy
+        pip install mypy types-requests
     - name: mypy
       run: |
-        mypy --install-types --ignore-missing-imports ./src
+        mypy --ignore-missing-imports ./src
