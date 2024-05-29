@@ -10,16 +10,17 @@ BlockHeight = int
 
 
 class BlockHeightField(mm.fields.Integer):
-    """Block Height is unsigned 64-bit integer, so it needs to be serialized as a string and get deserialized
-    to an integer type in Python.
+    """
+    Block Height is unsigned 64-bit integer, so it needs to be serialized
+    as a string and get deserialized to an integer type in Python.
     """
 
     def __init__(self, *args, **kwargs):
-        return super().__init__(*args, **kwargs, as_string=True)
+        super().__init__(*args, **kwargs, as_string=True)
 
 
 @dataclass
-class BlockHeader(DataClassJsonMixin):
+class BlockHeader(DataClassJsonMixin):  # pylint: disable=too-many-instance-attributes
     epoch_id: CryptoHash
     next_epoch_id: CryptoHash
     hash: CryptoHash
@@ -63,7 +64,7 @@ class BlockHeader(DataClassJsonMixin):
 
 
 @dataclass
-class ChunkHeader(DataClassJsonMixin):
+class ChunkHeader(DataClassJsonMixin):  # pylint: disable=too-many-instance-attributes
     chunk_hash: CryptoHash
     prev_block_hash: CryptoHash
     outcome_root: CryptoHash

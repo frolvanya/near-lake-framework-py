@@ -3,14 +3,12 @@ import asyncio
 import itertools
 from enum import Enum
 from typing import Optional
+from dataclasses import dataclass
 
 from aiobotocore.session import get_session  # type: ignore
 
 from near_lake_framework import near_primitives
 from near_lake_framework import s3_fetchers
-
-
-from dataclasses import dataclass
 
 
 class Network(Enum):
@@ -43,7 +41,7 @@ class LakeConfig:
     start_block_height: near_primitives.BlockHeight
     blocks_preload_pool_size: int = 200
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
         self,
         network: Network,
         aws_access_key_id: str,
@@ -86,7 +84,7 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
                 await asyncio.sleep(2)
                 continue
 
-            print("Received {} blocks from S3".format(len(block_heights_prefixes)))
+            print(f"Received {len(block_heights_prefixes)} blocks from S3")
 
             pending_block_heights = iter(block_heights_prefixes)
             streamer_messages_futures = []
