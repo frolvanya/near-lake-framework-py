@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="near-lake-framework",
-    version="0.0.9",
+    version="0.1.0",
     author="Ivan Frolov",
     author_email="frolvanya@gmail.com",
     description="Python Library to connect to the NEAR Lake S3 and stream the data",
