@@ -2,15 +2,23 @@ from __future__ import annotations
 import asyncio
 import itertools
 from enum import Enum
+
+import logging
 from typing import Optional
 
-from aiobotocore.session import get_session  # type: ignore
+from aiobotocore.session import get_session
 
 from near_lake_framework import near_primitives
 from near_lake_framework import s3_fetchers
 
 
 from dataclasses import dataclass
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 
 class Network(Enum):
@@ -81,12 +89,14 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
             )
 
             if not block_heights_prefixes:
-                print("No new blocks on S3, retry in 2s...")
+                logger.info("No new blocks on S3, retry in 2s...")
 
                 await asyncio.sleep(2)
                 continue
 
-            print("Received {} blocks from S3".format(len(block_heights_prefixes)))
+            logger.info(
+                "Received {} blocks from S3".format(len(block_heights_prefixes))
+            )
 
             pending_block_heights = iter(block_heights_prefixes)
             streamer_messages_futures = []
@@ -109,8 +119,8 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
                     and last_processed_block_hash
                     != streamer_message.block.header.prev_hash
                 ):
-                    print(
-                        "`prev_hash` does not match, refetching the data from S3 in 200ms",
+                    logger.warning(
+                        "`prev_hash` does not match, re-fetching the data from S3 in 200ms",
                         last_processed_block_hash,
                         streamer_message.block.header.prev_hash,
                     )

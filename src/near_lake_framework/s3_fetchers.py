@@ -1,10 +1,10 @@
 import asyncio
 import logging
-from typing import List
 import traceback
 from botocore.exceptions import ClientError
 
 from near_lake_framework import near_primitives
+from near_lake_framework.near_primitives import IndexerShard
 
 
 async def list_blocks(
@@ -12,7 +12,7 @@ async def list_blocks(
     s3_bucket_name: str,
     start_from_block_height: near_primitives.BlockHeight,
     number_of_blocks_requested: int,
-) -> List[near_primitives.BlockHeight]:
+) -> list[near_primitives.BlockHeight]:
     response = await s3_client.list_objects_v2(
         Bucket=s3_bucket_name,
         Delimiter="/",
@@ -47,7 +47,7 @@ async def fetch_streamer_message(
     ]
     shards = await asyncio.gather(*shards_fetching)
 
-    return near_primitives.StreamerMessage(block, shards)
+    return near_primitives.StreamerMessage(block, list(shards))
 
 
 async def fetch_shard_or_retry(
