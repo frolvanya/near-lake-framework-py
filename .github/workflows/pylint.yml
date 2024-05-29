@@ -1,11 +1,11 @@
-name: Mypy
+name: PyLint
 
 on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Mypy
+    name: PyLint
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.9
@@ -13,8 +13,6 @@ jobs:
       with:
         python-version: 3.9
     - name: Install Dependencies
-      run: |
-        pip install mypy
-    - name: mypy
-      run: |
-        mypy --ignore-missing-imports ./src
+      run: pip install pylint
+    - name: Run PyLint
+      run: pylint ./src

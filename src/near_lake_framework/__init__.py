@@ -5,6 +5,7 @@ from enum import Enum
 
 import logging
 from typing import Optional
+from dataclasses import dataclass
 
 from aiobotocore.session import get_session
 
@@ -51,7 +52,7 @@ class LakeConfig:
     start_block_height: near_primitives.BlockHeight
     blocks_preload_pool_size: int = 200
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
         self,
         network: Network,
         aws_access_key_id: str,
