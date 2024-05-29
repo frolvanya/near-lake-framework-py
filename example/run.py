@@ -1,48 +1,12 @@
 import asyncio
-import json
 import logging
 import os
 
-# This is not a direct dependency of NLF pip install requests to run
-import requests
+from near_lake_framework import LakeConfig, streamer, Network
+from near_lake_framework.utils import fetch_latest_block
 
-from near_lake_framework import LakeConfig, streamer, Network, near_primitives
-
-REQUEST_TIMEOUT = 10
 # Suppress warning logs from specific dependencies
 logging.getLogger("near_lake_framework").setLevel(logging.INFO)
-
-
-def fetch_latest_block(
-    network: Network = Network.MAINNET,
-) -> near_primitives.BlockHeight:
-    """
-    Define the RPC endpoint for the NEAR network
-    """
-    url = f"https://rpc.{network}.near.org"
-
-    # Define the payload for fetching the latest block
-    payload = json.dumps(
-        {
-            "jsonrpc": "2.0",
-            "id": "dontcare",
-            "method": "block",
-            "params": {"finality": "final"},
-        }
-    )
-
-    # Define the headers for the HTTP request
-    headers = {"Content-Type": "application/json"}
-
-    # Send the HTTP request to the NEAR RPC endpoint
-    response = requests.request(
-        "POST", url, headers=headers, data=payload, timeout=REQUEST_TIMEOUT
-    )
-
-    # Parse the JSON response to get the latest final block height
-    latest_final_block: int = response.json()["result"]["header"]["height"]
-
-    return latest_final_block
 
 
 async def main():
