@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 from dataclasses import dataclass, field
 from dataclasses_json import DataClassJsonMixin, config, mm
@@ -36,8 +36,8 @@ class BlockHeader(DataClassJsonMixin):
         metadata=config(mm_field=mm.fields.Integer(as_string=True))
     )
     random_value: CryptoHash
-    validator_proposals: List[Any]
-    chunk_mask: List[bool]
+    validator_proposals: list[Any]
+    chunk_mask: list[bool]
     gas_price: int = field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
     block_ordinal: Optional[int]
     rent_paid: int = field(metadata=config(mm_field=mm.fields.Integer(as_string=True)))
@@ -47,13 +47,13 @@ class BlockHeader(DataClassJsonMixin):
     total_supply: int = field(
         metadata=config(mm_field=mm.fields.Integer(as_string=True))
     )
-    challenges_result: List[Any]
+    challenges_result: list[Any]
     last_final_block: CryptoHash
     last_ds_final_block: CryptoHash
     next_bp_hash: CryptoHash
     block_merkle_root: CryptoHash
     epoch_sync_data_hash: Optional[CryptoHash]
-    approvals: List[Optional[str]]
+    approvals: list[Optional[str]]
     signature: str
     latest_protocol_version: int
     height: BlockHeight = field(metadata=config(mm_field=BlockHeightField()))
@@ -84,7 +84,7 @@ class ChunkHeader(DataClassJsonMixin):
     )
     outgoing_receipts_root: CryptoHash
     tx_root: CryptoHash
-    validator_proposals: List[Any]
+    validator_proposals: list[Any]
     signature: str
 
 
@@ -92,7 +92,7 @@ class ChunkHeader(DataClassJsonMixin):
 class Block(DataClassJsonMixin):
     author: AccountId
     header: BlockHeader
-    chunks: List[ChunkHeader]
+    chunks: list[ChunkHeader]
 
 
 @dataclass
@@ -113,13 +113,13 @@ class CostGasUsed(DataClassJsonMixin):
 @dataclass
 class ExecutionMetadata(DataClassJsonMixin):
     version: int
-    gas_profile: Optional[List[CostGasUsed]]
+    gas_profile: Optional[list[CostGasUsed]]
 
 
 @dataclass
 class ExecutionOutcome(DataClassJsonMixin):
-    logs: List[str]
-    receipt_ids: List[CryptoHash]
+    logs: list[str]
+    receipt_ids: list[CryptoHash]
     gas_burnt: int
     tokens_burnt: int = field(
         metadata=config(mm_field=mm.fields.Integer(as_string=True))
@@ -131,7 +131,7 @@ class ExecutionOutcome(DataClassJsonMixin):
 
 @dataclass
 class ExecutionOutcomeWithId(DataClassJsonMixin):
-    proof: List[Any]
+    proof: list[Any]
     block_hash: CryptoHash
     id: CryptoHash
     outcome: ExecutionOutcome
@@ -149,7 +149,7 @@ class SignedTransaction(DataClassJsonMixin):
     public_key: str
     nonce: int
     receiver_id: AccountId
-    actions: List[Any]
+    actions: list[Any]
     signature: str
     hash: CryptoHash
 
@@ -170,19 +170,19 @@ class IndexerTransactionWithOutcome(DataClassJsonMixin):
 class IndexerChunk(DataClassJsonMixin):
     author: AccountId
     header: ChunkHeader
-    transactions: List[IndexerTransactionWithOutcome]
-    receipts: List[Receipt]
+    transactions: list[IndexerTransactionWithOutcome]
+    receipts: list[Receipt]
 
 
 @dataclass
 class IndexerShard(DataClassJsonMixin):
     shard_id: int
     chunk: Optional[IndexerChunk]
-    receipt_execution_outcomes: List[IndexerExecutionOutcomeWithReceipt]
-    state_changes: List[Any]
+    receipt_execution_outcomes: list[IndexerExecutionOutcomeWithReceipt]
+    state_changes: list[Any]
 
 
 @dataclass
 class StreamerMessage(DataClassJsonMixin):
     block: Block
-    shards: List[IndexerShard]
+    shards: list[IndexerShard]

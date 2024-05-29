@@ -20,17 +20,25 @@ Greetings from the Data Platform Team! We are happy and proud to announce an MVP
 
 ```python3
 import asyncio
+import logging
 import os
 
 from near_lake_framework import LakeConfig, streamer, Network
+from near_lake_framework.utils import fetch_latest_block
+
+# Suppress warning logs from specific dependencies
+logging.getLogger("near_lake_framework").setLevel(logging.INFO)
 
 
 async def main():
+    network = Network.TESTNET
+    latest_final_block = fetch_latest_block(network=network)
     config = LakeConfig(
-        network=Network.MAINNET,
-        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-        aws_secret_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
-        start_block_height=69130938,
+        network,
+        start_block_height=latest_final_block,
+        # These fields must be set!
+        aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+        aws_secret_key=os.environ["AWS_SECRET_ACCESS_KEY"],
     )
 
     stream_handle, streamer_messages_queue = streamer(config)
@@ -41,8 +49,15 @@ async def main():
         )
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+if __name__ == "__main__":
+    loop = asyncio.new_event_loop()
+    loop.run_until_complete(main())
+```
+
+Try it yourself as follows
+```shell
+pip3 install -r requirements.txt
+python3 example/run.py
 ```
 
 ## How to use
