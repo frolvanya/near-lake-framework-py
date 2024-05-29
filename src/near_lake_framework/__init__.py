@@ -93,7 +93,7 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
                 await asyncio.sleep(2)
                 continue
 
-            logger.info(f"Received {len(block_heights_prefixes)} blocks from S3")
+            logger.info("Received %d blocks from S3", len(block_heights_prefixes))
 
             pending_block_heights = iter(block_heights_prefixes)
             streamer_messages_futures = []
@@ -117,7 +117,8 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
                     != streamer_message.block.header.prev_hash
                 ):
                     logger.warning(
-                        "`prev_hash` does not match, re-fetching the data from S3 in 200ms: %s != %s",
+                        "`prev_hash` does not match, re-fetching the data from S3 in 200ms: "
+                        "%s != %s",
                         last_processed_block_hash,
                         streamer_message.block.header.prev_hash,
                     )
