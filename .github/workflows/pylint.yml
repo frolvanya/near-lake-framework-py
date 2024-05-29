@@ -13,6 +13,7 @@ jobs:
       with:
         python-version: 3.9
     - name: Install Dependencies
-      run: pip install pylint
+      run: |
+        pip install pylint aiobotocore dataclasses-json botocore requests
     - name: Run PyLint
       run: pylint ./src

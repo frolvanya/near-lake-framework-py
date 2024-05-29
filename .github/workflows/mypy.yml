@@ -17,4 +17,4 @@ jobs:
         pip install mypy
     - name: mypy
       run: |
-        mypy --ignore-missing-imports ./src
+        mypy --install-types --ignore-missing-imports ./src
