@@ -4,7 +4,6 @@ import traceback
 from botocore.exceptions import ClientError, EndpointConnectionError
 
 from near_lake_framework import near_primitives
-from near_lake_framework.near_primitives import IndexerShard
 
 
 async def list_blocks(

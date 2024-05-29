@@ -13,8 +13,6 @@ from near_lake_framework import near_primitives
 from near_lake_framework import s3_fetchers
 
 
-from dataclasses import dataclass
-
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s"
@@ -95,9 +93,7 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
                 await asyncio.sleep(2)
                 continue
 
-            logger.info(
-                "Received {} blocks from S3".format(len(block_heights_prefixes))
-            )
+            logger.info(f"Received {len(block_heights_prefixes)} blocks from S3")
 
             pending_block_heights = iter(block_heights_prefixes)
             streamer_messages_futures = []
@@ -121,7 +117,7 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
                     != streamer_message.block.header.prev_hash
                 ):
                     logger.warning(
-                        "`prev_hash` does not match, re-fetching the data from S3 in 200ms",
+                        "`prev_hash` does not match, re-fetching the data from S3 in 200ms: %s != %s",
                         last_processed_block_hash,
                         streamer_message.block.header.prev_hash,
                     )
