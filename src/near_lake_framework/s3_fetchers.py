@@ -75,7 +75,9 @@ async def fetch_shard_or_retry(
             else:
                 traceback.print_exc()
         except EndpointConnectionError as e:
-            logging.error("EndpointConnectionError while fetching shard %s: %s", shard_key, e)
+            logging.error(
+                "EndpointConnectionError while fetching shard %s: %s", shard_key, e
+            )
             traceback.print_exc()
         except asyncio.TimeoutError as e:
             logging.error("TimeoutError while fetching shard %s: %s", shard_key, e)
