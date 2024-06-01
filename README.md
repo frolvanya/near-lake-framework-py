@@ -113,7 +113,10 @@ $5.19 + $12.96 = $18.15
 
 The price depends on the number of shards
 
+## Real-life Example
 
-### Publishing to PyPi
+Pagoda, a leading blockchain infrastructure company, utilizes the NEAR Lake Framework for Python in their [Gas Station Event Indexer](https://github.com/near/gas-station-event-indexer). This real-world implementation showcases the framework's capabilities in efficiently processing and indexing blockchain data.
+
+## Publishing to PyPi
 
 [Follow this guide to safely publish PyPi package](https://widdowquinn.github.io/coding/update-pypi-package/)
