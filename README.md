@@ -84,7 +84,7 @@ Available parameters:
 - `s3_bucket_name: str` - provide the AWS S3 bucket name (`near-lake-testnet`, `near-lake-mainnet` or yours if you run your own NEAR Lake)
 - `s3_region_name: str` - provide the region for AWS S3 bucket
 - `start_block_height: BlockHeight` - block height to start the stream from
-- `preload_pool_size: int` - provide the number of blocks to preload (default: 200)
+- `blocks_preload_pool_size: int` - provide the number of blocks to preload (default: 200)
 
 ## Cost estimates
 

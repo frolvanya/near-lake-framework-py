@@ -48,7 +48,7 @@ class LakeConfig:
     aws_access_key_id: str
     aws_secret_key: str
     start_block_height: near_primitives.BlockHeight
-    preload_pool_size: int = 200
+    blocks_preload_pool_size: int = 200
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
@@ -65,7 +65,7 @@ class LakeConfig:
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_key = aws_secret_key
         self.start_block_height = start_block_height
-        self.preload_pool_size = preload_pool_size
+        self.blocks_preload_pool_size = preload_pool_size
 
 
 async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
@@ -84,7 +84,7 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
                 s3_client,
                 config.s3_bucket_name,
                 start_from_block_height,
-                config.preload_pool_size * 2,
+                config.blocks_preload_pool_size * 2,
             )
 
             if not block_heights_prefixes:
@@ -149,7 +149,7 @@ async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
 
 def streamer(config: LakeConfig):
     streamer_messages_queue: asyncio.Queue = asyncio.Queue(
-        maxsize=config.preload_pool_size
+        maxsize=config.blocks_preload_pool_size
     )
     stream_handle = asyncio.create_task(start(config, streamer_messages_queue))
     return stream_handle, streamer_messages_queue
