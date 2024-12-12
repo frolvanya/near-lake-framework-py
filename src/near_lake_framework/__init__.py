@@ -56,7 +56,7 @@ class LakeConfig:
         aws_access_key_id: str,
         aws_secret_key: str,
         start_block_height: near_primitives.BlockHeight,
-        preload_pool_size: int = 200,
+        blocks_preload_pool_size: int = 200,
     ):
         # These are entirely determined by Network.
         self.s3_bucket_name = f"near-lake-data-{network.value}"
@@ -65,7 +65,7 @@ class LakeConfig:
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_key = aws_secret_key
         self.start_block_height = start_block_height
-        self.preload_pool_size = preload_pool_size
+        self.preload_pool_size = blocks_preload_pool_size
 
 
 async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
