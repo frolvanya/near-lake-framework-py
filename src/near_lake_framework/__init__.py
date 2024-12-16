@@ -56,7 +56,7 @@ class LakeConfig:
         aws_access_key_id: str,
         aws_secret_key: str,
         start_block_height: near_primitives.BlockHeight,
-        preload_pool_size: None,
+        preload_pool_size: None = None,
         block_preload_pool_size: int = 200
     ):
         logger.warning(
