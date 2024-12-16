@@ -56,8 +56,14 @@ class LakeConfig:
         aws_access_key_id: str,
         aws_secret_key: str,
         start_block_height: near_primitives.BlockHeight,
-        preload_pool_size: int = 200,
+        preload_pool_size: None,
+        block_preload_pool_size: int = 200
     ):
+        logger.warning(
+            "The 'preload_pool_size' argument is not used and will be deprecated in a "
+            "future release. Use 'blocks_preload_pool_size' instead."
+        )
+
         # These are entirely determined by Network.
         self.s3_bucket_name = f"near-lake-data-{network.value}"
         self.s3_region_name = "eu-central-1"
@@ -65,7 +71,7 @@ class LakeConfig:
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_key = aws_secret_key
         self.start_block_height = start_block_height
-        self.blocks_preload_pool_size = preload_pool_size
+        self.blocks_preload_pool_size = block_preload_pool_size
 
 
 async def start(config: LakeConfig, streamer_messages_queue: asyncio.Queue):
