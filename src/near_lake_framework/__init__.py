@@ -48,7 +48,7 @@ class LakeConfig:
     aws_access_key_id: str
     aws_secret_key: str
     start_block_height: near_primitives.BlockHeight
-    blocks_preload_pool_size: int = 200
+    blocks_preload_pool_size: int
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
@@ -57,12 +57,13 @@ class LakeConfig:
         aws_secret_key: str,
         start_block_height: near_primitives.BlockHeight,
         preload_pool_size: None = None,
-        block_preload_pool_size: int = 200
+        block_preload_pool_size: int = 200,
     ):
-        logger.warning(
-            "The 'preload_pool_size' argument is not used and will be deprecated in a "
-            "future release. Use 'blocks_preload_pool_size' instead."
-        )
+        if preload_pool_size:
+            logger.warning(
+                "The 'preload_pool_size' argument is not used and will be deprecated in a "
+                "future release. Use 'blocks_preload_pool_size' instead."
+            )
 
         # These are entirely determined by Network.
         self.s3_bucket_name = f"near-lake-data-{network.value}"
