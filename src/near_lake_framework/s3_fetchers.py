@@ -41,8 +41,8 @@ async def fetch_streamer_message(
     block = near_primitives.Block.from_json(body)
 
     shards_fetching = [
-        fetch_shard_or_retry(s3_client, s3_bucket_name, block_height, shard_id)
-        for shard_id in range(len(block.chunks))
+        fetch_shard_or_retry(s3_client, s3_bucket_name, block_height, chunk.shard_id)
+        for chunk in block.chunks
     ]
     shards = await asyncio.gather(*shards_fetching)
 
