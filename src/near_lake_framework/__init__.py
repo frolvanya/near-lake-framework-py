@@ -50,7 +50,7 @@ class LakeConfig:
     start_block_height: near_primitives.BlockHeight
     blocks_preload_pool_size: int
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         network: Network,
         aws_access_key_id: str,
